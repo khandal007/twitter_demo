@@ -1,0 +1,147 @@
+<% if(me.userRole == 65){%>
+<%- partial('../../../partials/dashboard-aside-super.ejs') %>
+<% }else if(me.userRole == 55){%>
+<%- partial('../../../partials/dashboard-aside-admin.ejs') %>
+<% }else{%>
+<%- partial('../../../partials/dashboard-aside-moderator.ejs') %>
+<%}%>
+
+<div class="content-wrapper">
+	<%- partial('../../../partials/dashboard-breadcrumb.ejs') %>
+    <section class="content">
+    	<div class="alert bg-success alert-dismissible mb-2" role="alert" id="sucessmsg" style="display:none">
+          	<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+          	<strong>Successfully!</strong> <span id="sucessMsg"></span>
+        </div>
+        <div class="alert bg-danger alert-dismissible mb-2" role="alert" id="errormsg" style="display:none">
+          	<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+          	<strong>Fail!</strong> <span id="errMsg"></span>
+        </div>
+
+	  <div class="row">
+	    <div class="col-md-12">
+	      <div class="box">
+	      	<input type="hidden" name="_csrf" id='_csrf' value="<%= _csrf %>" />	      	
+	      	<div class="box-header">
+	        	<div class="row">
+      				<div class="col-md-6">
+	          		</div>
+	          	</div>
+	        </div>
+	        <div class="box-content">
+	          <div class="box-body card-dashboard table-responsive">
+	            <table id="serverSideTable" class="table table-hover table-condensed table-striped table-bordered display">
+	              <thead>
+	                <tr>
+	                  <!-- <th>Action</th> -->		               	  
+	                  <th>Device Type</th>
+	               	  <th>IP Address</th>
+	               	  <th>Web Detail</th>
+	                  <th>Model</th>
+	                  <th>Device ID</th>
+	                  <th>Device IMEI</th>
+	                  <th>Date</th>		                  
+	                  <th>Name</th>		                  
+	                </tr>
+	              </thead>
+	          </table>
+	          </div>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+    </section>
+</div> 
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedcolumns/3.2.6/css/fixedColumns.dataTables.min.css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
+
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="/admin-dependencies/dist/js/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/fixedcolumns/3.2.6/js/dataTables.fixedColumns.min.js"></script>
+
+<script type="text/javascript" src="https://cdn.datatables.net/fixedheader/3.1.5/js/dataTables.fixedHeader.min.js"></script>
+<script type="text/javascript" src="//cdn.datatables.net/plug-ins/1.10.19/dataRender/ellipsis.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+
+	var url_string = window.location.href;
+    var url = new URL(url_string);
+    var val = url.searchParams.get('company_id');
+    var api_url = "/currentLoginList";
+    
+    dt = $('#serverSideTable').DataTable({
+        "processing": true,
+        "serverSide": true,
+        "fixedHeader": true,
+        "orderCellsTop": true,
+        "responsive": true,
+      	"scrollX"  : true,
+	   	"scrollY": 500,
+	   	"deferRender":    true,
+	   	"scrollCollapse": true,
+	   	"autoWidth": false,
+        "lengthMenu": [10, 50, 100, "All"],
+	    "dom": 'Blfrtip',
+	   "buttons": [
+	            {
+	                extend: 'copyHtml5',
+	                exportOptions: { orthogonal: 'export' }
+	            },
+	            {
+	                extend: 'excelHtml5',
+	                exportOptions: { orthogonal: 'export' }
+	            },
+	            {
+	                extend: 'pdfHtml5',
+	                exportOptions: { orthogonal: 'export' }
+	            }
+    	],
+        "ajax": {
+            url : api_url, // json datasource
+            type: "GET",  // method  , by default get
+            error: function(){  // error handling
+                $(".loaderOverlay").hide();
+	            $("#errormsg").show("slow");
+	            setTimeout(function(){ $("#errormsg").hide("slow"); }, 2000);
+	            $("#errMsg").text("something_bad_happened_please_try_again");
+            }
+        },
+        "columns": [
+            { "data": "device_type" },
+            { "data": "ip_address" },
+            { "data": "user_agent" },
+            { "data": "device_model" },
+            { "data": "device_id" },
+            { "data": "device_imei" },
+            { "data": "login_at" },
+            { "data": "fullName" }
+        ],
+        columnDefs: [ 
+        	{
+        		targets: 0,
+        		width: 10
+        	},
+	        {
+	        	 targets: 2,
+	             width: 20,
+	             render:  $.fn.dataTable.render.ellipsis( 20 )
+	        }
+        ]
+    });
+
+
+    var a = document.querySelectorAll(".custom_search");
+	console.log(a);
+    if(val){
+    	if(!firstTime){
+    		$('.search-input-select').trigger('change');
+    		firstTime = true;
+    	}
+    }
+})
+</script>  	

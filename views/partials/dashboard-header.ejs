@@ -1,0 +1,159 @@
+<header class="main-header">
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <a href="" class="logo">
+        <span class="logo-mini"><b>V</b><b>C</b></span>
+        <span class="logo-lg"><b><%=sails.config.constants.site_name%></b></span>
+    </a>
+    
+    <nav class="navbar navbar-static-top">
+    <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button"><span class="sr-only">Toggle navigation</span></a>
+
+          <% if(req.session.currentCompany){ %>
+    <div class="navbar-custom-menu1" style="float:left">
+        <a href="javascript:void(0)"  id="dropDiv" onclick="allCompany()" style="color:#fff;"><h3><strong><% if(req.session.currentCompany){ %><%=req.session.currentCompany.master_name%><% } %></strong>
+        <!-- <a href="/company/control-dashboard"><i style="color: #fff" class="fa fa-fw fa-refresh"></i></a> -->
+        <i style="color: #fff" class="fa fa-caret-down"></i>
+        </h3></a>
+      </div>
+      <% } %>
+    <div class="navbar-custom-menu">
+      <ul class="nav navbar-nav">
+        <li class="dropdown tasks-menu">
+            <!--*********Language Change Options**********************-->
+        
+        </li>
+        <li class="dropdown user user-menu">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <img <%if (req.me.avatar==''||req.me.avatar==null){%> src="/admin-dependencies/dist/img/user-160x160.jpg"<%}else{%>src="/uploads/images/avatar/<%=req.me.id%>/<%=req.me.avatar%>" <%}%> class="user-image" alt="User Image">
+              <span class="hidden-xs"><%= req.me.fullName %></span>
+            </a>
+          <ul class="dropdown-menu">
+            <li class="user-header">
+              <img <%if (req.me.avatar==''||req.me.avatar==null){%> src="/admin-dependencies/dist/img/user-160x160.jpg"<%}else{%>src="/uploads/images/avatar/<%=req.me.id%>/<%=req.me.avatar%>" <%}%> class="img-circle" alt="User Image">
+              <p>
+                <%= req.me.fullName %>
+              </p>
+            </li>
+            <% if(req.me.userRole == 65 && req.me.isSuperAdmin == 1){ %>
+              <li class="user-body">
+                <div class="row">
+                  <div class="col-xs-6 text-center">
+                    <a id="doBackUp" href="#">Backup</a>
+                  </div> 
+                  <div class="col-xs-6 text-center">
+                    <a href="/billingcompanysetting">Company Setting</a>
+                  </div>
+                </div>
+                <!-- /.row -->
+              </li>
+            <% } %>
+            <li class="user-footer">
+              <div class="pull-left">
+                <a href="/viewProfile" class="btn btn-default btn-flat"><%=__('profile')%></a>
+              </div>
+              <div class="pull-right">
+                <a id="logout" onclick="logout()" class="btn btn-default btn-flat"><%=__('sign_out')%></a>
+              </div>
+            </li>
+          </ul>
+        </li>
+        <li>
+        </li>
+      </ul>
+    </div>
+    </nav>
+</header>
+
+
+
+
+<script type="text/javascript">
+  
+     /*io.socket.on('transactionAdded', function (resData) {
+        //console.log('logout', resData);
+     });*/
+$(document).ready(function(e){
+  $("#doBackUp").click(function(e){
+    e.preventDefault();
+        $.ajax({
+          type: 'GET',
+          url: '/dailyBackup',
+          data: '',
+          datatype: 'json',
+          success: function (data) {
+              alert("Mail sent successfully");
+          },
+          error: function (data){
+            alert("Oops something bad happened");
+          }
+        });
+    });  
+
+
+  $("#doBackUpAll").click(function(e){
+    e.preventDefault();
+        $.ajax({
+          type: 'GET',
+          url: '/dailyBackupAll',
+          data: '',
+          datatype: 'json',
+          success: function (data) {
+            //console.log(data);
+              alert("Mail sent successfully");
+              // var anchor = document.createElement("a");
+              // anchor.setAttribute('href',data.data);
+              // anchor.setAttribute('download','');
+          },
+          error: function (data){
+            alert("Oops something bad happened");
+          }
+        });
+    });  
+});
+
+function logout(){
+  $.ajax({
+          type: 'PUT',
+          url: '/admin-secure/logout',
+          data: '',
+          datatype: 'json',
+          success: function (data) {
+            $.removeCookie('token', { path: '/' });
+            location.reload('/loginpanel');
+          },
+          error: function (data){
+            alert("Oops something bad happened");
+          }
+});
+}
+
+// function openNav(){
+//   $.ajax({
+//       type: 'GET',
+//       url: '/opensidebar',
+//       data: '',
+//       datatype:'json',
+//       success: function (data) {
+//          $("#sidenavcontent").html(data);
+//          document.getElementById("mySidenav").style.width = "80%";
+//         // $('#sideModal').modal('show');
+//       },
+//       error: function (data) {
+//         alert("something_bad_happened_please_try_again");
+//       },
+//   });
+//  } 
+
+  function allCompany(){
+    $(".overlayDivforHeader").slideToggle("slow");
+    $.ajax({
+        type: 'GET',
+        url: '/company/control-dashboard',
+        data: {},
+        datatype:'json',
+        success: function (data) {
+          $(".overlayDivforHeader").html(data);
+        }
+      });
+  };
+</script>

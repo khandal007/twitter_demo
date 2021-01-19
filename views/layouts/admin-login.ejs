@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title><%= sails.config.constants.site_name %> | Log in</title>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="stylesheet" href="/admin-dependencies/bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/admin-dependencies/bower_components/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/admin-dependencies/bower_components/Ionicons/css/ionicons.min.css">
+  <link rel="stylesheet" href="/admin-dependencies/dist/css/AdminLTE.css">
+  <link rel="stylesheet" href="/admin-dependencies/dist/css/bootstrap-material-design.min.css">
+  <link rel="stylesheet" href="/admin-dependencies/dist/css/ripples.min.css">
+  <link rel="stylesheet" href="/admin-dependencies/dist/css/MaterialAdminLTE.min.css">
+  <link rel="icon" href="/admin-dependencies/dist/img/favicon.png" type="image/gif" sizes="32x32">
+  <script src="/admin-dependencies/bower_components/jquery/dist/jquery.min.js"></script>
+  <style type="text/css">
+ .spanelBox {border: none !important}
+.upanelBox {border: 10px solid #00bcd4 !important}
+.panelBox {border: 10px solid #ffc000 !important}
+  </style>
+</head>
+<body class="hold-transition login-page">
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="/"><%= sails.config.constants.site_name %> <br><b><span class="ModuleName"></span></b></a>
+        </div>
+        <div class="login-box-body">
+            <p class="login-box-msg">Sign in to start your session</p>
+            <%- body %>
+        </div>
+    </div>
+</body>
+
+<script src="/admin-dependencies/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/admin-dependencies/dist/js/material.min.js"></script>
+<script src="/admin-dependencies/dist/js/ripples.min.js"></script>
+<script src="/dependencies/sails.io.js"></script>
+<script src="/dependencies/bowser.js"></script>
+<script src="/dependencies/vue.js"></script>
+
+<script type="text/javascript">
+    var pageURL = window.location.href;
+    var lastURLSegment = pageURL.substr(pageURL.lastIndexOf('/') + 1);
+    if (lastURLSegment == 'spanel') {
+
+        $(".ModuleName").html("Super Admin Login");
+        $("#userAuth").val('65');
+        $(".login-box-body").addClass('spanelBox');
+
+    } else if (lastURLSegment == 'upanel') {
+
+        $(".ModuleName").html("Company Admin Login");
+        $("#userAuth").val('55');
+        $(".admin_login").hide();
+        //$(".moderator_login").hide();
+         $(".login-box-body").addClass('upanelBox');
+
+
+    } else if (lastURLSegment == 'panel') {
+
+        $(".ModuleName").html("Moderator Login");
+        $("#userAuth").val('45');
+        $(".admin_login").hide();
+        $(".moderator_login").hide();
+        $(".ordiv").hide();
+
+    }
+</script>
+
+</html>

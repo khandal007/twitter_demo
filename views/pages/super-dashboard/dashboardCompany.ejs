@@ -1,0 +1,84 @@
+<!--**** Moderator Dashboard Aside *******-->
+<!-- Content Wrapper. Contains page content -->
+<script type="text/javascript">
+  $('document').ready(function(e){
+       $('.accordionOm').next().hide();
+        $(".opened").next().show();
+        $('.accordionOm').click(function()
+        {
+          if($(this).hasClass("opened") == true)
+          {
+            $(this).next().slideUp("slow");
+            $(this).removeClass('opened');
+          }
+          else
+          {
+            $(".opened").next().slideUp("slow");
+            $(".opened").removeClass("opened");
+            $(this).addClass('opened');
+            $(this).next().slideDown("slow");
+          }
+        });
+  })
+</script>
+<link rel="stylesheet" type="text/css" href="/admin-dependencies/dist/css/style.css">
+<div class="content-wrapper">  
+    <%- partial('../../partials/dashboard-breadcrumb.ejs') %>
+    <section class="content">
+      <div class="row">
+          <div class="col-md-12">
+         <% allotedCompanies.forEach(function(data,i){ %>
+         <div class="row">
+          <div class="col-md-12">
+        <h4 class="accordionOm"><%=data.text%></h4>
+        <div class="row">
+          <input type="text" placeholder="search" class="searchFilter" value="" onkeyup="searchCompany(this, <%=data.parent_company_id%>)">
+        <% data.children.forEach(function(d,j){ 
+           if(data.text != d.text){  
+                  var classname="bg-aqua";  
+                  var tabclass="border-aqua";
+                   }else { 
+                  var classname="bg-red";
+                  var tabclass="border-red"; 
+                   } 
+         %>
+           <div class="col-md-3 col-sm-6 col-xs-12 company_<%=data.parent_company_id%>">
+                
+                <div class="tab-box <%=tabclass%>" title="<%= d.text.toUpperCase() %>">
+                  
+                  <a href="/changeCompany?company_id=<%=d.id%>"><div class="headingBox <%=classname%>">
+                    <span class="ellipsis" style="width:90%; display:inline-block; font-size:14px;"><%= d.text.toUpperCase() %> <%if(d.pending_tr!=0){%></span><span class="bookMark" title="<%=d.pending_tr %> pending requirements"><%=d.pending_tr %></span><%}%>
+                    <span style="float: right; color: #fff;"><i class="fa fa-arrow-right" aria-hidden="true"></i></span>
+                  </div></a>
+                  <div class="detailsBox">
+                    <ul>
+                      <li><i class="fa fa-id-card" aria-hidden="true"></i> &nbsp; 
+                         <%= d.gst_number %><br><span>GST Number</span></li>
+                      <li><i class="fa fa-credit-card" aria-hidden="true"></i> &nbsp; <%= d.pan_number %><br><span>PAN Number</span></li>
+                    </ul>
+                  </div>
+                </div>
+
+            
+            </div>
+        <% }) %>  
+        </div>
+        </div>
+        </div>
+        <% }) %>
+      </div>      
+      </div>
+    </section>
+</div>
+<!-- /.content-wrapper -->
+<script type="text/javascript">
+  function searchCompany(obj, divId){
+    var value = $(obj).val();
+    var divClass = 'company_' + divId;
+    console.log(value);
+    console.log(divClass);
+     $("." + divClass).filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  }
+</script>

@@ -1,0 +1,200 @@
+
+<!--******** Moderator Dashboard Aside ************-->
+<% if(me.userRole == 65){%>
+<%- partial('../../../partials/dashboard-aside-super.ejs') %>
+<% }else if(me.userRole == 55){%>
+<%- partial('../../../partials/dashboard-aside-admin.ejs') %>
+<% }else{%>
+<%- partial('../../../partials/dashboard-aside-moderator.ejs') %>
+<%}%>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <%- partial('../../../partials/dashboard-breadcrumb.ejs') %>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="box box-primary">
+            <!-- <div class="box-header with-border">
+              <h3 class="box-title">Create User</h3>
+            </div > -->
+            <!-- /.box-header -->
+              <form id='addUser' role="form" action='' method="POST">
+                <div class="box-body">
+
+                  <div class="form-group">
+                    <% if(userResult.length >0){%><% if (userResult[0].fullName) {%> <label for="userEmail"><%=__('users_name')%> *</label><%}%><%}%>
+
+                    <input  name='fullName' type="text" class="form-control" id="fullName" placeholder="<%=__('enter_users_name')%> *" required <% if(userResult.length >0){%><% if (userResult[0].fullName) {%> value="<%= userResult[0].fullName%>"<%}%><%}%>>
+                  </div>
+                  <div class="form-group">
+                    <% if(userResult.length >0){%><% if (userResult[0].mobile) {%> <label for="mobile"><%=__('mobile')%> *</label><%}%><%}%>
+
+                    <input  name='mobile_no' type="text" class="form-control" id="mobile_no" placeholder="<%=__('Enter Mobile')%> *" required <% if(userResult.length >0){%><% if (userResult[0].mobile) {%> value="<%= userResult[0].mobile%>"<%}%><%}%>>
+                  </div>
+                  <div class="form-group">
+                    <% if(userResult.length >0){%><% if (userResult[0].fullName) {%> <label for="userEmail"><%=__('email_address')%> *</label><%}%><%}%>
+
+                    <input name='userEmail' type="email" class="form-control" id="userEmail" placeholder="<%=__('enter_email_id')%> *" required <% if(userResult.length >0){%><% if (userResult[0].emailAddress) {%> value="<%= userResult[0].emailAddress%>"<%}%><%}%>>
+                    <input type="hidden" name="_csrf" value="<%= _csrf %>" id="_csrf" />
+                    <input type="hidden" name="userRole" value="<%= req.me.userRole %>" id="userRole" />
+                  </div>
+                  <div class="form-group">
+                    <% if(userResult.length >0){%><% if (userResult[0].fullName) {%> <label for="exampleInputPassword1"><%=__('password')%> *</label><%}%><%}%>
+
+                    <input name='userPassword' type="password" class="form-control" id="userPassword" minlength='5' <% if(userResult.length >0){%><% if (userResult[0].password) {%> placeholder="" <%}%><%}else{%>  placeholder="<%=__('enter_password')%> *" required<%}%>>
+                  </div>
+                  <div class="form-group">
+                    <label for="usertype"><%=__('user_type')%> *: </label>
+                    <input type="radio" value='55' name="userType" class="flat-red"  required<% if(userResult.length >0){%><% if (userResult[0].userRole == 55) {%> checked <% }%><% }%>> <%=__('admin')%>
+
+                    <input type="radio" value='45' name="userType" class="flat-red" <% if(userResult.length >0){%><% if (userResult[0].userRole == 45) {%> checked <% }%><% }%>>  <%=__('moderator')%>
+                    <input type="radio" value='65' name="userType" class="flat-red" <% if(userResult.length >0){%><% if (userResult[0].userRole == 65) {%> checked <% }%><% }%>>  <%=__('Super-Admin')%>
+                  </div>
+                  <div class="form-group">
+                 
+                     <label for="confirm-password">User Access*</label><br>
+                      <% sails.config.constants.workMode.forEach(function(dt,jt){ %>
+                        <input type="checkbox" class="userLogin" name="userLogin[]" value="<%=dt.id%>" <% if(userResult.length >0){ if(userResult[0].userLogin.indexOf(dt.id) != -1){%> checked <%} }%> /> <%=dt.workType %> &nbsp;
+                      <% }) %>
+										<!-- 	<input type="checkbox" class="userLogin" name="userLogin[]" value="10" <% if(userResult.length >0){ if(userResult[0].userLogin.indexOf(10) != -1){%> checked <%} }%> /> Accounts Panel &nbsp;
+											<input type="checkbox" class="userLogin" name="userLogin[]" value="20" <% if(userResult.length >0){ if(userResult[0].userLogin.indexOf(20) != -1){%> checked <%} }%> /> Document Panel -->
+                  </div>
+                 
+                 </div>
+                <!-- /.box-body -->
+                <div class="box-body">
+                  <div class="alert alert-danger alert-dismissible" style="display:none" id="errormsg">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <h4><i class="icon fa fa-ban"></i> <%=__('alert')%>!</h4>
+                    <%=__('something_bad_happened_please_try_again')%>.
+                  </div>
+                  <div class="alert alert-success alert-dismissible" style="display:none" id="sucessmsg">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <h4><i class="icon fa fa-check"></i> <%=__('alert')%>!</h4>
+                    <% if(req.query.id){%><%=__('user_details_updated_successfully')%><%}else{%><%=__('user_created_successfully')%><%}%>
+                  </div>
+                </div>
+
+                <div class="loaderOverlay" id="trLoader" style="display: none;">
+                                  <i class="fa fa-refresh fa-spin"></i>
+                                </div>
+              <div class="box-footer">
+                <input type="hidden" name="user_id" value="<%=user_id%>">
+                <button type="submit" id="btn1" class="btn btn-primary"><%=__('submit')%></button>
+              </div>
+             
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+      </div>
+       </form>
+    </section>
+    <!-- /.content -->
+  </div>
+<script src="/admin-dependencies/js/cbFamily.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function(e){
+      $("h3 input:checkbox").cbFamily(function (){
+        return $(this).parents("h3").next().find("input:checkbox");
+      });
+
+      $("#fullName").focus();
+      $('input[type="radio"].flat-red').iCheck({
+        radioClass   : 'iradio_flat-green'
+      })
+
+      var frm = $('#addUser');
+
+      frm.submit(function (e) {
+         $("#trLoader").show();
+        var url_string = window.location.href;
+        var url = new URL(url_string);
+        var val = url.searchParams.get('id');
+        var ajaxData ={};
+        // if($("#userRole").val()==65){
+        //   var formData = {
+        //     fullName : $("#fullName").val(),
+        //     userEmail : $("#userEmail").val(),
+        //     userPassword : $("#userPassword").val(),
+        //     userType : $('input[name=userType]:checked').val(),
+        //     _csrf : $("#_csrf").val()
+        //   };
+        // }else{
+        //   var formData = {
+        //     userEmail : $("#userEmail").val(),
+        //     userPassword : $("#userPassword").val(),
+        //     userType : $('input[name=userType]:checked').val(),
+        //     _csrf : $("#_csrf").val()
+        //   };
+        // }
+
+        if(val){
+        
+            var ajaxUrl = '/master/updateUser';
+         
+          // var sel = $('.userLogin:checked').map(function(_, el) {
+          //     return $(el).val();
+          // }).get();
+          // formData.userLogin = sel;
+
+         //  ajaxData = formData;
+           ajaxData = frm.serialize();
+           console.log(ajaxData);
+           // return false;
+        //   ajaxData.user_id= val;
+        }else{
+          
+            var ajaxUrl = '/master/addUser';
+          
+          ajaxData = frm.serialize();
+        }
+        e.preventDefault();
+
+        $.ajax({
+            type: frm.attr('method'),
+            url: ajaxUrl,
+            data:ajaxData,
+            dataType: 'json',
+            success: function (data) {
+              console.log("data",data);
+              if(data.status == 'success'){
+              $("#sucessmsg").show();
+              frm.get(0).reset();
+                setTimeout(function(){
+                   $("#trLoader").hide();
+                   var radioValue = $("input[name='userType']:checked").val();
+                   if(radioValue == 45){
+                    window.location.replace("/master/companyAdminList?moderator=1");
+                   }else if(radioValue == 55){
+                     window.location.replace("/master/companyAdminList");
+                   }else{
+                      window.location.replace("/master/companyAdminList?moderator=2");
+                   }
+
+                  
+                  // location.reload(true);
+                }, 2000);
+                frm.get(0).reset();
+                $("#trLoader").hide();
+              }else{
+                $("#trLoader").hide();
+                alert(data.message);
+              }
+            },
+            error: function (data) {
+              $("#errormsg").show();
+              $("#trLoader").hide();
+              setTimeout(function(){
+                  $("#errormsg").hide("slow");
+                }, 2000);
+                console.log('An error occurred.');
+            },
+        });
+      });
+    });
+  </script>

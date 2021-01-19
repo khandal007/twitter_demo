@@ -1,0 +1,71 @@
+<body>
+	<section class="contact">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-12">
+					<h1>Stay Connect With Us</h1>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6" style="border-right:1px solid #ddd;">
+					<form class="contactForm" id="enquiryForm">
+						<div class="inputBox1">
+			             <input type="text" name="name" required="">
+			             <label>Name</label>
+			            </div>
+						<div class="inputBox1">
+			             <input type="text" name="phone" required="">
+			             <label>Phone</label>
+			            </div>
+						<div class="inputBox1">
+			             <input type="e-mail" name="email" required="">
+			             <label>E-Mail</label>
+			            </div>
+						<div class="inputBox1">
+			             <input type="text" name="company" required="">
+			             <label>Company</label>
+			            </div>
+						
+						<textarea rows="6" cols="72" placeholder="Enter Message" name="message"></textarea>
+						<button type="submit">SUBMIT</button>
+					</form>
+				</div>	
+				<div class="col-sm-6">
+					<iframe class="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7114.037157727427!2d75.79189263760377!3d26.934625479911784!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396db3ec7c71876f%3A0x2bef30813341b304!2sThe+Vision+House!5e0!3m2!1sen!2sin!4v1429340324672" scrolling="no"></iframe>
+				</div>	
+			</div>
+			<hr class="hrColor2 margin-0em-bottom">
+			<div class="row text-center">
+				<div class="col-sm-4">
+					<h4>Phone</h4>
+					<div><strong>+91 9610401016</strong></div>
+				</div>
+				<div class="col-sm-4 border-left-1">
+					<h4>E-Mail</h4>
+					<div><strong>info@thevisionhouse.in</strong></div>					
+				</div>
+				<div class="col-sm-4 border-left-1">
+					<h4>Address</h4>
+					<div class="padding-1em-left padding-1em-right"><strong> Plot No. 60 Khudabadi Sonara Marg, Ram Mandir Rd, Sindhi Colony, Bani Park<br>Jaipur, Rajasthan 302016.</strong></div>
+				</div>
+			</div>
+		</div>
+	</section>
+</body>
+<script type="text/javascript">
+	$(document).ready(function(){
+	$('#enquiryForm').submit(function(e){
+	    e.preventDefault();
+		var formdata = $('#enquiryForm').serialize();
+		$.ajax({
+			type: "POST",
+			url: '/user/contactUs',
+			data: formdata,
+			datatype:'json',
+			success: function(res) {
+				alert(res.message);
+			}
+		});
+	});
+});
+</script>

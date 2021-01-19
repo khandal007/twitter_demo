@@ -1,0 +1,189 @@
+<!--**** Moderator Dashboard Aside *******-->
+<% if(req.me.userRole == 65) { %>
+<%- partial('../../partials/dashboard-aside-super.ejs') %>
+<% } else if(req.me.userRole == 55){ %>
+<%- partial('../../partials/dashboard-aside-admin.ejs') %>
+<% }else{ %>
+<%- partial('../../partials/dashboard-aside-moderator.ejs') %>
+<% } %>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">  
+<%- partial('../../partials/dashboard-breadcrumb.ejs') %>
+<section class="content">
+  <div class="row" style="display: block">
+    <div class="col-md-12">
+        <%- partial('../../partials/dashboard-quicklinks') %>
+    </div>
+  </div>
+
+  <div class="box">
+    <div class="box-body">
+      <div class="row">
+        <div class="col-sm-2">
+          <a href="/uploadDocument" class="btn btn-raised bg-teal-gradient text-white uploadDocBtn ellipsis"><strong>
+            <i class="fa fa-file-text" aria-hidden="true"></i> &nbsp;Upload Documents</strong></a>
+        </div>
+        <div class="col-sm-2">
+          <a href="/master/projectList" class="btn btn-raised bg-blue-gradient text-white uploadDocBtn ellipsis"><strong>
+            <i class="fa fa-building-o"></i> &nbsp;Project List</strong></a>
+        </div>
+        <div class="col-sm-2">
+          <a href="/master/siteList" class="btn btn-raised bg-yellow-gradient text-white uploadDocBtn ellipsis"><strong>
+            <i class="fa fa-map-marker"></i> &nbsp;Costcenter List</strong></a>
+        </div>
+        <div class="col-sm-2">
+          <a href="/invoice/entries?mode=po" class="btn btn-raised bg-red-gradient text-white uploadDocBtn ellipsis"><strong>
+            <i class="fa fa-edit"></i> &nbsp;PO Issue</strong></a>
+        </div>
+        <div class="col-sm-2">
+          <a href="/goods/master?goods_type=1" class="btn btn-raised bg-yellow-gradient text-white uploadDocBtn"><strong>
+            <i class="fa fa-database" aria-hidden="true"></i> &nbsp;Goods Master</strong></a>
+        </div>
+        <div class="col-sm-2">
+          <a href="/inventory/inventoryList" class="btn btn-raised bg-green-gradient text-white uploadDocBtn ellipsis"><strong>
+            <i class="fa fa-cart-arrow-down" aria-hidden="true"></i> &nbsp;Inventory</strong></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+    <% if(req.me.userRole == 65 || (req.me.userLogin.indexOf(10) != -1)){ %>  
+    <%- partial('../../partials/ledger-type') %>
+    <%- partial('../../partials/ledger-search') %>
+    <% } %>
+    <% if(req.me.userRole == 65 || (req.me.userLogin.indexOf(120) != -1)){ %>
+    <%- partial('../../partials/ledger-site') %>
+    <% } %>
+    </div>
+    <div class="col-md-6">
+      <div class="row">
+      <div class="col-md-12">
+      <div class="box box-info collapsed-box">
+        <div class="box-header with-border text-navy-theme">
+              <h3 class="box-title">Transaction</h3>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool bg-blue-gradient" data-widget="collapse"><i class="fa fa-plus moduleDashBtn"></i>
+                </button>
+                <button style="display:inline-block;vertical-align:middle;float: right;" onclick="window.location.replace('/form/entries?type=1')" type="button" class="btn btn-box-tool bg-blue-gradient"><i style="color:white;" class="fa fa-eye" aria-hidden="true"></i><div class="ripple-container"></div></button>
+              </div>
+            </div>
+        <div class="box-body">
+                <div class="table-responsive">
+                  <table class="table no-margin moduledash_table dashboardtable">
+                    <tbody>
+                      <tr>
+                        <th>Name</th>
+                        <th><%= __('done') %></th>
+                        <th><%= __('approval') %></th>
+                        <th><%= __('requirement') %></th>
+                        <th colspan="2">Action</th>
+                      </tr>
+                      <% totalObj.map(function (cnt,i){  
+                        var isShowTr =true;
+                         if(req.me.userRole != 65 && (req.me.userLogin.indexOf(cnt.id*7) == -1)){
+                            isShowTr = false;
+                          }
+
+                        %>
+                      <% 
+                      if(isShowTr){
+                      if(cnt.category=='Transaction' || cnt.category == 'Payment') { %>
+                    <tr> 
+                      <td><%=cnt.modeName%></td> 
+                      <td style="cursor: pointer;" onclick="window.location.replace('/jumpToDashboard?mode=<%=cnt.id%>')"><%=(!cnt.processed_amount)?0:cnt.processed_amount%></td>
+                      <td style="cursor: pointer;" onclick="window.location.replace('/jumpToDashboard?mode=<%=cnt.id%>')"><%=(!cnt.level1_amount)?0:cnt.level1_amount%></td>
+                      <td style="cursor: pointer;" onclick="window.location.replace('/jumpToDashboard?mode=<%=cnt.id%>')"><%=(!cnt.level2_amount)?0:cnt.level2_amount%></td>
+                   
+                      <td>
+                        <%if(cnt.modeName=='Reg Expenditure'){%>
+                          <i style="cursor: pointer;" class="fa fa-plus" onclick="window.location.replace('/form/registeredform?mode=grn&modetype=<%=cnt.id%>')" aria-hidden="true"></i>
+                        <%}else{%>
+                          <i style="cursor: pointer;" class="fa fa-plus" onclick="window.location.replace('/form/transactionForm?mode=<%=cnt.id%>')" aria-hidden="true"></i>
+                        <%}%>
+                      </td> 
+                    </tr>
+                    <% }} %>
+                    <% }) %>
+                    </tbody>
+                  </table>
+                </div>
+                <!-- /.table-responsive -->
+         </div>
+    </div>
+  </div>
+    <div class="col-md-12">
+      <div class="box box-info collapsed-box">
+          <div class="box-header with-border text-navy-theme">
+                <h3 class="box-title">Inventory</h3>
+                <div class="box-tools pull-right">
+                  <button type="button" class="btn btn-box-tool bg-blue-gradient" data-widget="collapse"><i class="fa fa-plus moduleDashBtn"></i>
+                  </button>
+                  <button style="display:inline-block;vertical-align:middle;float: right;" onclick="window.location.replace('/form/entries?type=1')" type="button" class="btn btn-box-tool bg-blue-gradient"><i style="color:white;" class="fa fa-eye" aria-hidden="true"></i><div class="ripple-container"></div></button>
+                </div>
+              </div>
+          <div class="box-body">
+                  <div class="table-responsive">
+                    <table class="table no-margin moduledash_table dashboardtable">
+                      <tbody>
+                        <tr>
+                          <th>Name</th>
+                          <th><%= __('done') %></th>
+                          <th><%= __('approval') %></th>
+                          <th><%= __('requirement') %></th>
+                          <th colspan="2">Action</th>
+                        </tr>
+                        <% totalObj.map(function (cnt,i){  
+                          var isShowIv = true;
+                          if(req.me.userRole != 65 && (req.me.userLogin.indexOf(cnt.id*7) == -1)){
+                            isShowIv = false;
+                          }
+                          %>
+                        <% 
+                        if(isShowIv){
+                        if(cnt.payment_type=='inventory') { %>
+                      <tr> 
+                        <td><%=cnt.modeName%></td> 
+                        <td style="cursor: pointer;" onclick="window.location.replace('/jumpToDashboard?mode=<%=cnt.id%>')"><%=(!cnt.processed_amount)?0:cnt.processed_amount%></td>
+                        <td style="cursor: pointer;" onclick="window.location.replace('/jumpToDashboard?mode=<%=cnt.id%>')"><%=(!cnt.level1_amount)?0:cnt.level1_amount%></td>
+                        <td style="cursor: pointer;" onclick="window.location.replace('/jumpToDashboard?mode=<%=cnt.id%>')"><%=(!cnt.level2_amount)?0:cnt.level2_amount%></td> 
+                        
+                        <td><i  style="cursor: pointer;" class="fa fa-plus" onclick="window.location.replace('/invoice/entries?mode=<%=cnt.modeName.toLowerCase()%>')" aria-hidden="true"></i></td>
+                      </tr>
+                      <% }} %>
+                      <% }) %>
+                      </tbody>
+                    </table>
+                  </div>
+                  <!-- /.table-responsive -->
+           </div>
+      </div>
+  </div>
+
+
+  </div>
+  </div>
+</section>
+</div>
+<!-- /.content-wrapper -->
+<script type="text/javascript">
+  function focusFunction(data, amount){
+    if(amount==undefined){
+      var amounttitle = convertToWords(0);
+      $(data).attr("title", amounttitle);
+    }
+    else{
+      var amounttitle = convertToWords(amount); 
+      $(data).attr("title", amounttitle);
+    }
+  }
+  $(document).ready(function(){
+  $("#searchLedger").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $(".ledgerBox").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>

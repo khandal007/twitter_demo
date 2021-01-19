@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Invoice PDF</title>
+	<link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,500,500i,700,700i&display=swap" rel="stylesheet">
+</head>
+<body style="font-family: 'Roboto', sans-serif;">
+	<style>
+	.taxInvoice { width:100%; border-top:1px solid #bbb; border-left:1px solid #bbb; margin-bottom:10px; font-size:12px;}
+	.taxInvoice th { background:#e4e4e4;}
+	.taxInvoice th,
+	.taxInvoice td { border-bottom:1px solid #bbb; border-right:1px solid #bbb; text-align:center; padding:3px 10px;}
+	</style>
+<div style="max-width:1120px; width:100%; margin:0 auto; overflow:hidden;">
+
+	<div style="float:right;"><img src="<%=image_url%>" width="100px;"></div>
+						<table class="taxInvoice" id="printableArea" cellspacing="0" border="0">
+							<thead>
+								<th colspan="4">Tax Invoice</th>
+							</thead>
+							<tbody>
+								<tr>
+									<td rowspan="5" colspan="2">
+										<div style="text-align: left;">
+											To,<br>
+											Indus Towers Ltd.<br>
+											103 Baleshwar Square, Opp Iskon Temple,<br>
+											SG Highway, Satellite, Ahmedabad,Gujarat<br>
+											INDUS GSTIN No: 24AABCI7776BB1ZO
+										</div>
+									</td>
+									<td>Invoice No.</td>
+									<td><strong>TVHGJ/20-21/0007</strong></td>
+								</tr>
+								<tr>
+									<td>Invoice Date:</td>
+									<td>6<strong>8-Apr-2020</strong></td>
+								</tr>
+								<tr>
+									<td>New PO No.</td>
+									<td><STRONG>14030169660</STRONG></td>
+								</tr>
+								<tr>
+									<td>New PO Date:</td>
+									<td><strong>03-Mar-2020</strong></td>
+								</tr>
+								<tr>
+									<td>WCC No-</td>
+									<td>1418192417</td>
+								</tr>
+								<tr>
+									<td rowspan="2">Supplier Address</td>
+									<td rowspan="2"><strong>1st Floor, F-12, Narayan Lotus, New Chandrakheda Ahmedabad, Gujarat, 382424</strong></td>
+									<td>Receipt Number:</td>
+									<td><strong>14060267311</strong></td>
+								</tr>
+								<tr>
+									<td>Site Name:</td>
+									<td><strong>Budasan</strong></td>
+								</tr>
+								<tr>
+									<td>RFAI Date</td>
+									<td><strong></strong></td>
+									<td>INDUS SITE ID:</td>
+									<td><strong>IN- 1348686</strong></td>
+								</tr>
+								<tr>
+									<td>Month of Service:</td>
+									<td><strong>34</strong></td>
+									<td>Ref No.-</td>
+									<td><strong>R/RES 423551</strong></td>
+								</tr>
+							</tbody>
+						</table>
+						<table class="taxInvoice" cellspacing="0" border="0">
+							<thead>
+								<th>Sr.No.</th>
+								<th>Description</th>
+								<th>Item Code</th>
+								<th>HSN/SAC Code</th>
+								<th>UOM</th>
+								<th>Qty</th>
+								<th>Rate</th>
+								<th>Basic Amount</th>
+							</thead>
+							<tbody>
+								<tr>
+									<td>1</td>
+									<td>Silicon Sealent Tube - Capex</td>
+									<td>12-900000-C-00-ZZ-ZZ-121</td>
+									<td>3214</td>
+									<td>Each</td>
+									<td>1</td>
+									<td>183</td>
+									<td>183.00</td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>Silicon Sealent Tube - Capex</td>
+									<td>12-900000-C-00-ZZ-ZZ-121</td>
+									<td>3214</td>
+									<td>Each</td>
+									<td>1</td>
+									<td>183</td>
+									<td>183.00</td>
+								</tr>
+								<tr>
+									<td colspan="7"><div style="text-align:right;">Total A</div></td>
+									<td><strong>183.00</strong></td>
+								</tr>
+								<tr>
+									<td colspan="7"><div style="text-align:right;">Total Basic Amount (A+B)</div></td>
+									<td><strong>183.00</strong></td>
+								</tr>
+								<tr>
+									<td colspan="7"><div style="text-align:right;">CGST 9%</div></td>
+									<td>183.00</td>
+								</tr>
+								<tr>
+									<td colspan="7"><div style="text-align:right;">SGST 9%</div></td>
+									<td>183.00</td>
+								</tr>
+								<tr>
+									<td colspan="7"><div style="text-align:right;">Total Amount</div></td>
+									<td><strong>183.00</strong></td>
+								</tr>
+								<tr>
+									<td colspan="8"><div style="text-align:left; font-weight:bold;">Amount In Words:</div></td>
+								</tr>
+							</tbody>
+						</table>
+						<table class="taxInvoice" cellspacing="0" border="0">
+							<tr>
+								<td rowspan="4">
+									<div style="text-align:left;">
+										I/We herbey Declare that My/Our regitration certificate under Gujarat value added Tax Act,2003 is in force on the date on
+									</div>
+								</td>
+								<td>GST No.</td>
+								<td><strong>24AHVPG8733E2Z3</strong></td>
+							</tr>
+							<tr>
+								<td>PAN No.</td>
+								<td><strong>AHVPG8733E</strong></td>
+							</tr>
+							<tr>
+								<td>PF No.</td>
+								<td><strong>Raj 20267</strong></td>
+							</tr>
+							<tr>
+								<td>ESI No.</td>
+								<td><strong>15000373180001000</strong></td>
+							</tr>
+						</table>
+</div>
+</body>
+</html>

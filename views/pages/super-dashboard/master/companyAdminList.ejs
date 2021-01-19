@@ -1,0 +1,312 @@
+<style>
+    .example-modal .modal {
+      position: relative;
+      top: auto;
+      bottom: auto;
+      right: auto;
+      left: auto;
+      display: block;
+      z-index: 1;
+    }
+
+    .example-modal .modal {
+      background: transparent !important;
+    }
+  </style>
+<!--******** Moderator Dashboard Aside *********** -->
+<% if(me.userRole == 65){%>
+<%- partial('../../../partials/dashboard-aside-super.ejs') %>
+<% }else if(me.userRole == 55){%>
+<%- partial('../../../partials/dashboard-aside-admin.ejs') %>
+<% }else{%>
+<%- partial('../../../partials/dashboard-aside-moderator.ejs') %>
+<%}%>
+
+<div class="content-wrapper">
+    <section class="content">
+        <div class="row">
+        <div class="col-md-12">
+          <div class="box">
+            <div class="box-header">
+              <% if((req.url === '/master/companyAdminList?moderator=1')|| (req.url === '/users/companyAdmins?moderator=1')){%>
+              <div class="row">
+                <div class="col-md-6">
+                  <h3 class="box-title"><%=__('list_of_moderators')%></h3>
+                </div>
+                <div class="col-md-6 text-right">
+                  <a class="addUser" href="<%= (me.userRole == 65)?'/master/createUser':'/users/createCompanyUsers'%>">
+                    <i class="ionicons ion-person-add"></i> <%=__('add_new_user')%>
+                  </a>
+                </div>
+              </div>
+              <%} else if(req.url === '/master/companyAdminList?moderator=2') {%>
+                  <div class="row">
+                <div class="col-md-6">
+                  <h3 class="box-title">List of Super Admins</h3>
+                </div>
+                <div class="col-md-6 text-right">
+                  <a class="addUser" href="<%= (me.userRole == 65)?'/master/createUser':'/users/createCompanyUsers'%>">
+                    <i class="ionicons ion-person-add"></i> <%=__('add_new_user')%>
+                  </a>
+                </div>
+              </div>
+              <% } else{%>
+              <div class="row">
+                <div class="col-md-6">
+                  <h3 class="box-title"><%=__('list_of_admins')%></h3>
+                </div>
+                <div class="col-md-6 text-right">
+                  <a class="addUser" href="<%= (me.userRole == 65)?'/master/createUser':'/users/createCompanyUsers'%>">
+                    <i class="ionicons ion-person-add"></i> <%=__('add_new_user')%>
+                  </a>
+                </div>
+              </div>
+              
+              <% } %> 
+              
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table id="example2" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th><%=__('s_no.')%></th>
+                  <th><%=__('name')%></th>
+                  <th><%=__('email_id')%></th>
+                  <th><%=__('Mobile')%></th>
+                  <th><%=__('status')%></th>
+                  <th><%=__('action')%></th>
+                </tr>
+                </thead>
+                <tbody>
+                <% companyAdminList.forEach(function(data,i){ %>
+                    <tr>
+                      <td><%= i+1 %></td>
+                      <td><%= data.fullName %></td>
+                      <td><%= data.emailAddress %></td>
+                      <td><%= data.mobile %></td>
+                      <td><% if(data.isActive == 1) { %> <span class="label label-success">Active</span> <% }else{ %> <span class="label label-danger">Inactive</span> <% } %></td>
+                      <td><a <% if(me.userRole==65){%> href="/master/createUser?id=<%= data.id %>" <%}else{%> href="/users/createCompanyUsers?id=<%= data.id %>"<%}%>><i class="fa fa-pencil"></i></a> | <a href="" id="" data-toggle="modal" data-target="#headModel" onclick="storeid(<%=data.id%>,'<%=data.fullName%>',<%=data.isActive%>)"><i class="fa fa-user"></i></a> | <a href="/userProject?id=<%=data.id%>"><i class="fa fa-file-text-o"></i></a> | <a href="" id="deleteicon" data-toggle="modal" data-target="#modal-default" onclick="storeid(<%=data.id%>,'<%=data.fullName%>',<%=data.isActive%>)"><i class="fa fa-trash"></i></a></td>
+                    </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+              <input type="hidden" name="_csrf" id='_csrf' value="<%= _csrf %>" />
+              <input type="hidden" name="deleteId" id='deleteId' />
+              <input type="hidden" name="deleteName" id='deleteName' />
+              <input type="hidden" name="deleteStatus" id='deleteStatus' />
+              <input type="hidden" name="languageCode" id='languageCode' value="<%= req.me.languagePreference %>"/>
+              <input type="hidden" name="userRole" value="<%= req.me.userRole %>" id="userRole" />
+            </div>
+            <div class="modal fade" id="modal-default">
+            <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><%=__('confirm_delete')%></h4>
+              </div>
+              <div class="modal-body">
+                <p>Are you sure you want to do this ?</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default " data-dismiss="modal"><%=__('cancel')%></button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="deleteUser()">Alter</button>
+              </div>
+                </div>
+                <!-- /.modal-content -->
+              </div>
+              <!-- /.modal-dialog -->
+            </div>
+            <!-- /.box-body -->
+
+
+            <div class="modal fade" id="headModel">
+            <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Update Head Visibility</h4>
+              </div>
+              <div class="modal-body">
+                <p>This is the list of Heads you have disabled access for <strong id="userName"></strong></p>
+                <div class="form-group">
+                <label>Multiple</label>
+                <select id="getHeadList" class="form-control select2" multiple="multiple" data-placeholder="Choose head for disabling access"
+                        style="width: 100%;">
+                 
+                </select>
+              </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default " data-dismiss="modal"><%=__('cancel')%></button>
+                <button type="button" class="btn btn-primary" onclick="updateHeadUser()">Update</button>
+              </div>
+                </div>
+                <!-- /.modal-content -->
+              </div>
+              <!-- /.modal-dialog -->
+            </div>
+
+          </div>
+        </div>
+        </div>
+    </section>
+</div>
+
+<script type="text/javascript" src="/admin-dependencies/bower_components/select2/dist/js/select2.full.min.js"></script>
+<script src="/admin-dependencies/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+
+<script src="/admin-dependencies/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="/admin-dependencies/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="/admin-dependencies/dist/js/jszip.min.js"></script>
+<!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"> -->
+<script type="text/javascript">
+  $(document).ready(function(e){
+    var datatableObj={
+      'paging'      : true,
+      'lengthChange': true,
+      'searching'   : true,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : false,
+      dom : 'Blfrtip',
+      // fixedColumns: {
+      //      "leftColumns": 2
+      //    },
+      buttons: [
+        {
+            extend: 'copyHtml5',
+            exportOptions: { orthogonal: 'export' }
+        },
+        {
+            extend: 'excelHtml5',
+            exportOptions: { orthogonal: 'export' }
+        },
+        {
+            extend: 'pdfHtml5',
+            exportOptions: { orthogonal: 'export' }
+        }
+      ],
+    }
+    
+
+    $('#example2').DataTable(datatableObj);
+
+     $("#headModel").on('shown.bs.modal', function(){
+      let getId = $("#deleteId").val();
+      let getName = $("#deleteName").val();
+      $("#userName").text(getName);
+       getAllheads(getId);
+     });
+  })
+    
+  function updateHeadUser(){
+    console.log($("#getHeadList").val());
+     let sendHeadIds = $("#getHeadList").val();
+
+      let getId = $("#deleteId").val();
+     let url ="/master/updateDisabledHead";
+     let data = { "sendHeadIds":sendHeadIds,"_csrf":$("#_csrf").val(),"uid":getId};
+     let send_type="POST";
+     let showLoading = false;
+     let loaderClass="";
+     doAjaxCall(url,data,send_type,showLoading,loaderClass,function(data,type){
+      console.log(data);
+      console.log(type);
+            if(type != 1){
+               alert("Something went wrong");   
+               // $("#getHeadList").html('');
+              }else{
+                if(data.status == "success"){                      
+                  alert("Updated successfully");
+                  $("#headModel").modal('hide');
+                 }else{                      
+                  alert("Something went wrong");
+                 }
+                                   
+            }
+      })
+  }
+
+  function getAllheads(id){
+     let url = "/master/userHeadList";
+     if(id){
+        url=url+"?uid="+id;
+      }else{
+        return false;
+      }
+     let data = {};
+     let send_type="GET";
+     let showLoading = false;
+     let loaderClass="";
+     $("#getHeadList").select2();
+      doAjaxCall(url,data,send_type,showLoading,loaderClass,function(data,type){
+            if(type != 1){
+                $("#getHeadList").html('');
+              }else{
+               var newOptions="";
+                     $.each(data.allHeads, function (key, val) {
+                            var selectedOption="";
+                            //console.log(key + val); 
+                            if(val.checkId){
+                              selectedOption = "selected";
+                            }                               
+                            newOptions = `${newOptions}<option ${selectedOption} value="${val.id}">${val.account_name}</option>`;
+                            selectedOption="";
+                        });
+                    $("#getHeadList").html(newOptions); 
+                    
+            }
+      })
+  }
+  function storeid(id,name,status){
+    $("#deleteId").attr({"value":id}) ;
+    $("#deleteName").attr({"value":name}) ;
+    $("#deleteStatus").attr({"value":status}) ;
+  }
+
+  function deleteUser(){
+    let id = $("#deleteId").val();
+    $("#deleteId").value='';
+    var url_string = window.location.href;
+    var url = new URL(url_string);
+    var moderator = url.searchParams.get('moderator');
+    $.ajax({
+        type: "DELETE",
+        url: "/master/deleteUser",
+        data:{"user_id":id,"_csrf":$("#_csrf").val(),"in_activity":$("#deleteStatus").val()},
+        dataType: 'json',
+        success: function (data) {
+          if(data.status == "success"){
+            alert("successfully updated");
+          }else{
+            alert("Something bad happened");
+          }
+          location.reload();
+          // if(moderator){
+          // if($("#userRole").val()==65){
+          //   location.reload();
+          //   //window.location.replace("/master/companyAdminList?moderator=1");
+          // }else{
+          //  // window.location.replace("/users/companyAdmins?moderator=1");
+          // }
+          // }else{
+          // if($("#userRole").val()==65){
+          //   window.location.replace("/master/companyAdminList");
+          // }else{
+          //   window.location.replace("/users/companyAdmins");
+          // }
+          // }
+        },
+        error: function (data) {
+          console.log('An error occurred.');
+          alert("Something bad happened");
+          location.reload();
+        },
+    });
+  }
+</script>

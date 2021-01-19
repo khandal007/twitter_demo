@@ -1,0 +1,122 @@
+<!--********* Dashboard Aside ********* -->
+<% if(req.me.userRole == 65) { %>
+<%- partial('../../../partials/dashboard-aside-super.ejs') %>
+<% } else if(req.me.userRole == 55){ %>
+<%- partial('../../../partials/dashboard-aside-admin.ejs') %>
+<% }else{ %>
+<%- partial('../../../partials/dashboard-aside-moderator.ejs') %>
+<% } %>
+
+<div class="content-wrapper">
+  <%- partial('../../../partials/dashboard-breadcrumb.ejs') %>
+  <section class="content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="box">
+          <div class="box-header">
+            <div class="row">
+              <div class="col-md-6">
+                <!-- <h3 class="box-title">List Of Company Master</h3> -->
+              </div>
+              <% if(req.me.userRole != 45){ %>
+              <div class="col-md-6 text-right">
+                <a class="addUser" href="/company/createCompany">
+                  <i class="fa fa-plus"></i> Add New Company
+                </a>
+              </div>
+              <% } %>
+            </div>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body">
+            <table id="example2" class="table table-bordered table-striped">
+              <thead>
+              <tr>
+                <th>Company Name</th>
+                <th>Parent Company Name</th>
+                <th>State</th>
+                <th>Mobile</th>
+                <th>GSTIN</th>
+                <th><%=__('status')%></th>
+                <th><%=__('action')%></th>
+              </tr>
+              </thead>
+              <tbody>
+                <% companyMasterList.forEach(function(data,i){ %>
+                  <tr <%if(data.master_name==data.parent_company){%> style="background-color: cornsilk;" <%}%>>
+                    <td><strong><%= data.master_name %></strong></td>
+                    <td><%if(data.master_name!=data.parent_company){%><strong><%= data.parent_company %></strong> <% } %></td>
+                    <td><%= data.state_name %></td>
+                    <td><%= data.master_mobile %></td>
+                    <td><%= data.gst_number %></td>
+                    <td style="<%= (data.isActive == 1)? 'color: #20b731':'color: red' %>">
+                      <%= (data.isActive == 1)? 'Active':'Inactive' %></td>
+                    <td>
+                        <a href="/company/createCompany?company_id=<%= data.id %>"><i class="fa fa-pencil"></i></a> 
+                   </td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+      </div>
+    </div>
+    </div>
+  </section>
+</div>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="/admin-dependencies/dist/js/jszip.min.js"></script>
+<script type="text/javascript">
+  $(document).ready(function(e){
+    var datatableObj = {
+      paging      : true,
+      lengthChange: true,
+      searching   : true,        
+      info       : true,
+      ordering   : true,
+      autoWidth   : false,
+      lengthMenu: [[10, 50, 100, -1], [10, 50, 100, "All"]],
+      dom : 'Blfrtip',
+      // fixedColumns: {
+      //      "leftColumns": 2
+      //    },
+      buttons: [
+        {
+            extend: 'copyHtml5',
+            exportOptions: { orthogonal: 'export' }
+        },
+        {
+            extend: 'excelHtml5',
+            exportOptions: { orthogonal: 'export' }
+        },
+        {
+            extend: 'pdfHtml5',
+            exportOptions: { orthogonal: 'export' }
+        }
+      ],
+    };
+
+    let example = $('#example2').DataTable(datatableObj);
+    example.on("click", "th.select-checkbox", function() {
+        if ($("th.select-checkbox").hasClass("selected")) {
+            example.rows().deselect();
+            $("th.select-checkbox").removeClass("selected");
+        } else {
+            example.rows().select();
+            $("th.select-checkbox").addClass("selected");
+        }
+    }).on("select deselect", function() {
+        ("Some selection or deselection going on")
+        if (example.rows({
+                selected: true
+            }).count() !== example.rows().count()) {
+            $("th.select-checkbox").removeClass("selected");
+        } else {
+            $("th.select-checkbox").addClass("selected");
+        }
+    });
+   
+  });
+
+</script>

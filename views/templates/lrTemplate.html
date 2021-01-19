@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Invoice PDF</title>
+	<!-- <link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,500,500i,700,700i&display=swap" rel="stylesheet"> -->
+</head>
+<body style="font-family: 'Roboto', sans-serif;">
+	<style type="text/css">
+	.box-body { padding-top:0; padding-bottom:0;}
+	.lrInvoiceAddress {width:100%; border-top:1px solid #bbb; border-left:1px solid #bbb; font-size:6px;}
+	.font10{ font-size:6px;}
+	.lrInvoiceAddress th { background:#ddd;}
+	.lrInvoiceAddress th,
+	.lrInvoiceAddress td { border-bottom:1px solid #333; border-right:1px solid #bbb; vertical-align:top; padding:0px 4px;}
+	.customRow {display:inline-block; width:100%;}
+	.col20 { width:28%; display:inline-block; float:left;}
+	.col50 { width:50%; display:inline-block; float:left;}
+	.col80 { width:70%; display:inline-block; float:left;}
+	.textRight { text-align:right;}
+	.textCenter { text-align:center;}
+	.lrInvoiceAddress ul { padding-left: 5px;}
+	.lrInvoiceAddress ul li{ display:inline-block; padding:0 4px; font-weight:600;}
+	.lrInvoiceAddress p { margin-bottom:0px;}
+	.branchAddress { font-size:6px; font-weight:600; text-align:center;}
+	.outerDiv1 { height:auto; overflow:hidden; position:relative; padding-bottom:5px;;background:url('https://l3.visioncloud.in/admin-dependencies/dist/img/tvh-logo2.1.png') no-repeat center ; background-size:20%; padding-top:10px;}
+	.hideName { display:none;}
+	.innerTable {width:100%;}
+	.innerTable td { border-bottom:1px solid #bbb !important; border-right:0px !important;}	
+	.customRowAddress { display:inline-block; width:100%; font-size:10px;}
+	.printDiv { margin:0 3px 0 9px;}
+	.ellipsis { text-overflow:ellipsis; overflow:hidden; white-space:nowrap;}
+	.customHr { margin:0 0 2px 0; border:0; border-bottom:1px dashed #333;}
+	.col80 p { font-size:6px;}
+	.tagline { position:absolute; bottom:0; font-weight:400; font-size:4px;}
+	.lrQr { position: absolute; top:21px; left:100px;}	
+    </style>
+<div class="content-wrapper" id="contentwrapper">
+    <section class="content">
+    	<div class="box">    			
+    		<div class="box-body">
+    			<div class="outerDiv1">
+					<div class="customRowAddress" >
+						<div class="col20">
+							<img src="<%=img_url1%>" width="80">
+						</div>
+						<div class="col80" style="text-align:right;">
+							<h5 style="margin:0;"><%=data[0].billing_name%></h5>
+							<p style="margin:0;"><strong>Regd Office</strong> : <%=data[0].address%></p>
+							<p style="margin:0;"><strong>Coporate Office</strong> : <%=data[0].correspondence_address%></p>
+						</div>
+					</div>
+					<span class="lrQr"><img src="<%=qrUrl%>" class="qr-code img-thumbnail img-responsive" width="35"></span>
+					<div class="customRow">
+						<div class="col20" style="margin-right:5px;">
+							<table class="lrInvoiceAddress" cellpadding="10">
+								<tr>
+									<td>
+										<div>
+											<div class="textCenter">CAUTION</div>
+											<p>The Consignment will not declared delievered re-routed or re-booked without Consignee Bank's written permission will be delivered at the destination.</p>
+											<div class="textCenter">INSURANCE</div>
+											<p>The Customer as started that Hw has not insured the Consignment or he has insured the Consignment.</p>
+											<p>
+												<ul>
+													<li>Company</li>
+													<li>Policy No.</li>
+													<li>Date</li>
+													<li>Amount</li>
+													<li>Risk</li>
+												</ul>
+											</p>
+											<div class="textCenter">NOTICE</div>
+											<p>The Consignment covered by this set of special Lorry Receiption from shall be started at the destination under the contract of the Transport operator and shall be delivered to or the order of the Lorry Receipt if will under no cirsumstances be delievered to any one without the written authority from the consignee copy or a separate letter of authority.</p>
+											<div class="textCenter">INDORSEMENT</div>
+											<p>It is a intended to us the CONSIGNEE COPY  of this set for the purpose of borrowing from the consignee bank.</p>
+										</div>
+									</td>
+								</tr>
+							</table>
+							<div class="font10">Material recived in good condition</div>
+						</div>
+						<div class="col80">
+							<div class="branchAddress">
+							<!-- <span class="hideName" style="float:left; font-size:14px;"><%=data[0].account_name%></span> -->
+							<span style="float:left">Branch Office: <%=data[0].address%>, GSTN: <%=data[0].gst_number%></span>
+							<span style="float:right;">Driver Copy</span>
+							</div>
+							<table class="lrInvoiceAddress" cellspacing="0"  cellpadding="10">
+									<tr> 
+										<td style="width:70%;" rowspan="2">
+											<div style="width:80%;">
+											<div>
+												<strong>CONSIGNOR:</strong>
+												<%if(data[0].route_type==1){%>
+												<%=data[0].billing_master_name%>
+												<%}else if(data[0].route_type==2){%>
+												<%=data[0].consignor%>
+												<%}else{%>
+												<%=data[0].consignor%>
+												<%}%>
+											</div>
+											<div>
+												<strong>CONSIGNEE:</strong>
+												<%if(data[0].route_type==1){%>
+												<%=data[0].consignee%>
+												<%}else if(data[0].route_type==2){%>
+												<%=data[0].billing_master_name%>
+												<%}else{%>
+												<%=data[0].consignee%>
+												<%}%>
+											</div>
+											</div>
+										</td>
+										<td valign="top" style="position:relative;">
+											<div>
+												<span>Lr. No. : <%=data[0].lr_slug%></span>
+												<span style="float:right;">Dated : <%=moment( data[0].lr_date).format("DD/MM/YYYY")%></span>
+											</div>
+										</td>
+									</tr>
+									<tr>					
+										<td>
+											<div class="customRow" style="padding-top:2px;">
+											<div class="col50">From : <%for(var i=0;i<address.length;i++){ if(address[i].type==1){%>
+													<%=(address[i].stock_id!=null)?address[i].city_name: address[i].town%>
+													<%}}%></div>
+											<div class="col50 ellipsis" style="text-align:right;">To : <%for(var i=0;i<address.length;i++){ if(address[i].type==2){%>
+													<%=(address[i].stock_id!=null)?address[i].city_name: address[i].town%>,
+													<%}}%> </div>
+											</div>
+										</td>
+									</tr>
+							</table>
+							<table class="lrInvoiceAddress" cellspacing="0" cellpadding="5">
+								<thead>
+									<th width="60">No. of Pkgs</th>
+									<th>Description (Said to Contain)</th>
+									<th width="100">Sender's Vehicle Detail</th>
+									<th width="100">Rate</th>
+									<th width="50">Freight Rs.</th>
+								</thead>
+								<tbody>
+									<tr>
+										<td rowspan="8">
+											<%for(var i=0;i<data.length;i++){%>
+											<%=data[i].packet_count%>
+											<%if(i!=data.length-1){%>
+											+
+											<%}}%>
+											</td>
+										<td rowspan="8">
+											<%for(var i=0;i<data.length;i++){%>
+											<%=data[i].package_description%>, 
+											<%}%>
+											<div class="customRow" style="margin-top:10px;">
+												<div class="col50">
+													STN No. : <%=data[0].stn_no%><br>
+													LORRY NO. : <%=data[0].registration_no%><BR>
+													SITE ID FROM : <%for(var i=0;i<address.length;i++){ if(address[i].type==1){%>
+													<%=(address[i].stock_id!=null)?address[i].stock: address[i].site_id%>,
+													<%}}%><BR>
+													LOADING FLOOR : <%for(var i=0;i<address.length;i++){ if(address[i].floor!=null){%>
+															<%=address[i].floor%>,
+													<%}}%> <BR>
+													VALUE Rs. : <%=data[0].amount%>
+												</div>
+												<div class="col50">
+													MRN No. <%=data[0].mrn_no%><BR>
+													ESCORT NAME : <%=data[0].escort%><br>
+													TO : <%for(var i=0;i<address.length;i++){ if(address[i].type==2){%>
+													<%=(address[i].stock_id!=null)?address[i].stock: address[i].site_id%>,
+													<%}}%><br>
+													UNLOADING FLOOR : <%for(var i=0;i<address.length;i++){ if(address[i].floor!=null){%>
+															<%=address[i].floor%>,
+													<%}}%><br>
+												</div>
+											</div>
+										</td>
+										<td>
+											<div>Charged KM</div>
+											<div><%=data[0].total_km%></div>
+										</td>
+										<td><%=data[0].lr_category==1?"To be Billed":""%></td>
+										<td></td>
+									</tr>
+									<tr>
+										<td rowspan="7">
+											<div>Charged Weight KG</div>
+											<% var x=0;for(var i=0;i<data.length;i++){%>
+											    <%x = x+data[i].total_weight%>
+											<%}%>
+											<div><%=x%></div>
+											<div>Vehicle Type</div>
+											<div><%=data[0].vehicle_type_name%></div>
+										</td>
+										<td rowspan="7" colspan="2" style="padding:0">
+											<table class="innerTable">
+												<% for(var x in other_info) {%>
+										        <tr>
+										          <th><span><%= x %></span></th>
+										          <td><span><%=other_info[x]%></span></td>
+										        </tr>
+										        <%}%>
+											</table>
+										</td>
+								</tbody>
+							</table>
+							<div class="customRow font10">
+								<span class="col50 textCenter">ALL SUBJECT TO JAIPUR JURISDICTION ONLY</span>
+								<span class="col50 textRight"><strong>For: Vision Freight Solutions India Private Limited</strong></span>
+							</div>
+							<div class="font10">
+								N.B
+								<ol>
+									<li>I/We have carefully read condition of the Company overleaf and declare that the particulars famished above are correct.</li>
+									<li>The consignment by Rules & Regulations of the Company whose vessies and/or truck are engaged.</li>
+									<li>The Company is not respomsible for rebooking after three months.</li>
+								</ol>
+							</div>
+						</div>
+					</div>
+					<div class="customRow font10" style="padding-top:0px;">
+						<span class="col50"><strong>RECEIVED BY</strong></span>
+						<span class="col50 textRight"><strong>BOOKING INCHARGE</strong></span>
+						<div class="tagline">
+						<span>"This is system generated document by vision clouds". All rights reseved to the vision house</span> || 
+						<span>Email:<a href="mailto:vc@thevisionhouse.in">vc@thevisionhouse.in</a></span> ||
+						<span>Website:www.visioncloud.in</span>
+						</div>
+					</div>		
+					</div>
+				<hr class="customHr">
+				<div class="outerDiv1 outerDiv2">
+					<div class="customRowAddress">
+						<div class="col20">
+							<img src="<%=img_url1%>" width="80">
+						</div>						
+						<div class="col80" style="text-align:right;">
+							<h5 style="margin:0;"><%=data[0].billing_name%></h5>
+							<p style="margin:0;"><strong>Regd Office</strong> : <%=data[0].address%></p>
+							<p style="margin:0;"><strong>Coporate Office</strong> : <%=data[0].correspondence_address%></p>
+						</div>
+					</div>
+					<span class="lrQr"><img src="<%=qrUrl%>" class="qr-code img-thumbnail img-responsive" width="35"></span>
+    					<div class="customRow">
+							<div class="col20" style="margin-right:5px;">
+								<table class="lrInvoiceAddress" cellpadding="10">
+									<tr>
+										<td>
+											<div>
+												<div class="textCenter">CAUTION</div>
+												<p>The Consignment will not declared delievered re-routed or re-booked without Consignee Bank's written permission will be delivered at the destination.</p>
+												<div class="textCenter">INSURANCE</div>
+												<p>The Customer as started that Hw has not insured the Consignment or he has insured the Consignment.</p>
+												<p>
+													<ul>
+														<li>Company</li>
+														<li>Policy No.</li>
+														<li>Date</li>
+														<li>Amount</li>
+														<li>Risk</li>
+													</ul>
+												</p>
+												<div class="textCenter">NOTICE</div>
+												<p>The Consignment covered by this set of special Lorry Receiption from shall be started at the destination under the contract of the Transport operator and shall be delivered to or the order of the Lorry Receipt if will under no cirsumstances be delievered to any one without the written authority from the consignee copy or a separate letter of authority.</p>
+												<div class="textCenter">INDORSEMENT</div>
+												<p>It is a intended to us the CONSIGNEE COPY  of this set for the purpose of borrowing from the consignee bank.</p>
+											</div>
+										</td>
+									</tr>
+								</table>
+								<div class="font10">Material recived in good condition</div>
+							</div>
+							<div class="col80">
+								<div class="branchAddress">
+								<!-- <span style="float:left; font-size:14px;"><%=data[0].account_name%></span> -->
+								<span style="float:left">Branch Office: <%=data[0].address%>, GSTN: <%=data[0].gst_number%></span>
+								<span style="float:right;">Record Copy</span>
+								</div>
+								<table class="lrInvoiceAddress" cellspacing="0"  cellpadding="10">
+										<tr> 
+											<td style="width:70%;" rowspan="2">
+												<div style="width:80%;">
+												<div>
+													<strong>CONSIGNOR:</strong>
+													<%if(data[0].route_type==1){%>
+													<%=data[0].billing_master_name%>
+													<%}else if(data[0].route_type==2){%>
+													<%=data[0].consignor%>
+													<%}else{%>
+													<%=data[0].consignor%>
+													<%}%>
+												</div>
+												<div>
+													<strong>CONSIGNEE:</strong>
+													<%if(data[0].route_type==1){%>
+													<%=data[0].consignee%>
+													<%}else if(data[0].route_type==2){%>
+													<%=data[0].billing_master_name%>
+													<%}else{%>
+													<%=data[0].consignee%>
+													<%}%>
+												</div>
+												</div>
+											</td>
+											<td valign="top" style="position:relative;">
+												<div>
+													<span>Lr. No. : <%=data[0].lr_slug%></span>
+													<span style="float:right;">Dated : <%=data[0].lr_date%></span>
+												</div>
+											</td>
+										</tr>
+										<tr>					
+											<td>
+												<div class="customRow" style="padding-top:2px;">
+												<div class="col50">From : <%for(var i=0;i<address.length;i++){ if(address[i].type==1){%>
+														<%=(address[i].stock_id!=null)?address[i].city_name: address[i].town%>
+														<%}}%></div>
+												<div class="col50 ellipsis" style="text-align:right;">To : <%for(var i=0;i<address.length;i++){ if(address[i].type==2){%>
+														<%=(address[i].stock_id!=null)?address[i].city_name: address[i].town%>,
+														<%}}%> </div>
+												</div>
+											</td>
+										</tr>
+								</table>
+								<table class="lrInvoiceAddress" cellspacing="0" cellpadding="5">
+									<thead>
+										<th width="60">No. of Pkgs</th>
+										<th>Description (Said to Contain)</th>
+										<th width="100">Sender's Vehicle Detail</th>
+										<th width="100">Rate</th>
+										<th width="50">Freight Rs.</th>
+									</thead>
+									<tbody>
+										<tr>
+											<td rowspan="8">
+												<%for(var i=0;i<data.length;i++){%>
+												<%=data[i].packet_count%>
+												<%if(i!=data.length-1){%>
+												+
+												<%}}%>
+											</td>
+											<td rowspan="8">
+												<%for(var i=0;i<data.length;i++){%>
+												<%=data[i].package_description%>, 
+												<%}%>
+												<div class="customRow" style="margin-top:10px;">
+													<div class="col50">
+														STN No. : <%=data[0].stn_no%><br>
+														LORRY NO. : <%=data[0]. registration_no%><BR>
+														SITE ID FROM :<%for(var i=0;i<address.length;i++){ if(address[i].type==1){%>
+														<%=(address[i].stock_id!=null)?address[i].stock: address[i].site_id%>,
+														<%}}%><BR>
+														LOADING FLOOR :<%for(var i=0;i<address.length;i++){ if(address[i].type!=null){%>
+																<%=address[i].floor%>,
+														<%}}%> <BR>
+														VALUE Rs. : <%=data[0].amount%>
+													</div>
+													<div class="col50">
+														MRN No. <%=data[0].mrn_no%><BR>
+														ESCORT NAME : <%=data[0].escort%><br>
+														TO : <%for(var i=0;i<address.length;i++){ if(address[i].type==2){%>
+														<%=(address[i].stock_id!=null)?address[i].stock: address[i].site_id%>,
+														<%}}%><br>
+														UNLOADING FLOOR : <%for(var i=0;i<address.length;i++){ if(address[i].floor!=null){%>
+																<%=address[i].floor%>,
+														<%}}%><br>
+													</div>
+												</div>
+											</td>
+											<td>
+												<div>Charged KM</div>
+												<div><%=data[0].total_km%></div>
+											</td>
+											<td><%=data[0].lr_category==1?"To be Billed":""%></td>
+											<td></td>
+										</tr>
+										<tr>
+											<td rowspan="7">
+												<div>Charged Weight KG</div>
+												<% var x=0;for(var i=0;i<data.length;i++){%>
+												    <%x = x+data[i].total_weight%>
+												<%}%>
+												<div><%=x%></div>
+												<div>Vehicle Type</div>
+												<div><%=data[0].vehicle_type_name%></div>
+											</td>
+											<td rowspan="7" colspan="2" style="padding:0">
+												<table class="innerTable">
+													<% for(var x in other_info) {%>
+											        <tr>
+											          <th><span><%= x %></span></th>
+											          <td><span><%=other_info[x]%></span></td>
+											        </tr>
+											        <%}%>
+												</table>
+											</td>
+									</tbody>
+								</table>
+								<div class="customRow font10">
+									<span class="col50 textCenter">ALL SUBJECT TO JAIPUR JURISDICTION ONLY</span>
+									<span class="col50 textRight"><strong>For: Vision Freight Solutions India Private Limited</strong></span>
+								</div>
+								<div class="font10">
+									N.B
+									<ol>
+										<li>I/We have carefully read condition of the Company overleaf and declare that the particulars famished above are correct.</li>
+										<li>The consignment by Rules & Regulations of the Company whose vessies and/or truck are engaged.</li>
+										<li>The Company is not respomsible for rebooking after three months.</li>
+									</ol>
+								</div>
+							</div>
+						</div>
+						<div class="customRow font10" style="padding-top:0px;">
+							<span class="col50"><strong>RECEIVED BY</strong></span>
+							<span class="col50 textRight"><strong>BOOKING INCHARGE</strong></span>
+							<div class="tagline">
+							<span>"This is system generated document by vision clouds". All rights reseved to the vision house</span> || 
+							<span>Email:<a href="mailto:vc@thevisionhouse.in">vc@thevisionhouse.in</a></span> ||
+							<span>Website:www.visioncloud.in</span>
+							</div>
+						</div>		
+				</div>
+    			<div class="outerDiv1 outerDiv2">
+					<div class="customRowAddress" >
+						<div class="col20">
+							<img src="<%=img_url1%>" width="80">
+						</div>
+						<div class="col80" style="text-align:right;">
+							<h5 style="margin:0;"><%=data[0].billing_name%></h5>
+							<p style="margin:0;"><strong>Regd Office</strong> : <%=data[0].address%></p>
+							<p style="margin:0;"><strong>Coporate Office</strong> : <%=data[0].correspondence_address%></p>
+						</div>
+					</div>
+					<span class="lrQr"><img src="<%=qrUrl%>" class="qr-code img-thumbnail img-responsive" width="35"></span>
+					<div class="customRow">
+						<div class="col20" style="margin-right:5px;">
+							<table class="lrInvoiceAddress" cellpadding="10">
+								<tr>
+									<td>
+										<div>
+											<div class="textCenter">CAUTION</div>
+											<p>The Consignment will not declared delievered re-routed or re-booked without Consignee Bank's written permission will be delivered at the destination.</p>
+											<div class="textCenter">INSURANCE</div>
+											<p>The Customer as started that Hw has not insured the Consignment or he has insured the Consignment.</p>
+											<p>
+												<ul>
+													<li>Company</li>
+													<li>Policy No.</li>
+													<li>Date</li>
+													<li>Amount</li>
+													<li>Risk</li>
+												</ul>
+											</p>
+											<div class="textCenter">NOTICE</div>
+											<p>The Consignment covered by this set of special Lorry Receiption from shall be started at the destination under the contract of the Transport operator and shall be delivered to or the order of the Lorry Receipt if will under no cirsumstances be delievered to any one without the written authority from the consignee copy or a separate letter of authority.</p>
+											<div class="textCenter">INDORSEMENT</div>
+											<p>It is a intended to us the CONSIGNEE COPY  of this set for the purpose of borrowing from the consignee bank.</p>
+										</div>
+									</td>
+								</tr>
+							</table>
+							<div class="font10">Material recived in good condition</div>
+						</div>
+						<div class="col80">
+							<div class="branchAddress">
+							<!-- <span class="hideName" style="float:left; font-size:14px;"><%=data[0].account_name%></span> -->
+							<span style="float:left">Branch Office: <%=data[0].address%>, GSTN: <%=data[0].gst_number%></span>
+							<span style="float:right;">Consignor Copy</span>
+							</div>
+							<table class="lrInvoiceAddress" cellspacing="0"  cellpadding="10">
+									<tr> 
+										<td style="width:70%;" rowspan="2">
+											<div style="width:80%;">
+											<div>
+												<strong>CONSIGNOR:</strong>
+												<%if(data[0].route_type==1){%>
+												<%=data[0].billing_master_name%>
+												<%}else if(data[0].route_type==2){%>
+												<%=data[0].consignor%>
+												<%}else{%>
+												<%=data[0].consignor%>
+												<%}%>
+											</div>
+											<div>
+												<strong>CONSIGNEE:</strong>
+												<%if(data[0].route_type==1){%>
+												<%=data[0].consignee%>
+												<%}else if(data[0].route_type==2){%>
+												<%=data[0].billing_master_name%>
+												<%}else{%>
+												<%=data[0].consignee%>
+												<%}%>
+											</div>
+											</div>
+										</td>
+										<td valign="top" style="position:relative;">
+											<div>
+												<span>Lr. No. : <%=data[0].lr_slug%></span>
+												<span style="float:right;">Dated : <%=moment( data[0].lr_date).format("DD/MM/YYYY")%></span>
+											</div>
+										</td>
+									</tr>
+									<tr>					
+										<td>
+											<div class="customRow" style="padding-top:2px;">
+											<div class="col50">From : <%for(var i=0;i<address.length;i++){ if(address[i].type==1){%>
+													<%=(address[i].stock_id!=null)?address[i].city_name: address[i].town%>
+													<%}}%></div>
+											<div class="col50 ellipsis" style="text-align:right;">To : <%for(var i=0;i<address.length;i++){ if(address[i].type==2){%>
+													<%=(address[i].stock_id!=null)?address[i].city_name: address[i].town%>,
+													<%}}%> </div>
+											</div>
+										</td>
+									</tr>
+							</table>
+							<table class="lrInvoiceAddress" cellspacing="0" cellpadding="5">
+								<thead>
+									<th width="60">No. of Pkgs</th>
+									<th>Description (Said to Contain)</th>
+									<th width="100">Sender's Vehicle Detail</th>
+									<th width="100">Rate</th>
+									<th width="50">Freight Rs.</th>
+								</thead>
+								<tbody>
+									<tr>
+										<td rowspan="8">
+											<%for(var i=0;i<data.length;i++){%>
+											<%=data[i].packet_count%>
+											<%if(i!=data.length-1){%>
+											+
+											<%}}%>
+											</td>
+										<td rowspan="8">
+											<%for(var i=0;i<data.length;i++){%>
+											<%=data[i].package_description%>, 
+											<%}%>
+											<div class="customRow" style="margin-top:10px;">
+												<div class="col50">
+													STN No. : <%=data[0].stn_no%><br>
+													LORRY NO. : <%=data[0].registration_no%><BR>
+													SITE ID FROM : <%for(var i=0;i<address.length;i++){ if(address[i].type==1){%>
+													<%=(address[i].stock_id!=null)?address[i].stock: address[i].site_id%>,
+													<%}}%><BR>
+													LOADING FLOOR : <%for(var i=0;i<address.length;i++){ if(address[i].floor!=null){%>
+															<%=address[i].floor%>,
+													<%}}%> <BR>
+													VALUE Rs. : <%=data[0].amount%>
+												</div>
+												<div class="col50">
+													MRN No. <%=data[0].mrn_no%><BR>
+													ESCORT NAME : <%=data[0].escort%><br>
+													TO : <%for(var i=0;i<address.length;i++){ if(address[i].type==2){%>
+													<%=(address[i].stock_id!=null)?address[i].stock: address[i].site_id%>,
+													<%}}%><br>
+													UNLOADING FLOOR : <%for(var i=0;i<address.length;i++){ if(address[i].floor!=null){%>
+															<%=address[i].floor%>,
+													<%}}%><br>
+												</div>
+											</div>
+										</td>
+										<td>
+											<div>Charged KM</div>
+											<div><%=data[0].total_km%></div>
+										</td>
+										<td><%=data[0].lr_category==1?"To be Billed":""%></td>
+										<td></td>
+									</tr>
+									<tr>
+										<td rowspan="7">
+											<div>Charged Weight KG</div>
+											<% var x=0;for(var i=0;i<data.length;i++){%>
+											    <%x = x+data[i].total_weight%>
+											<%}%>
+											<div><%=x%></div>
+											<div>Vehicle Type</div>
+											<div><%=data[0].vehicle_type_name%></div>
+										</td>
+										<td rowspan="7" colspan="2" style="padding:0">
+											<table class="innerTable">
+												<% for(var x in other_info) {%>
+										        <tr>
+										          <th><span><%= x %></span></th>
+										          <td><span><%=other_info[x]%></span></td>
+										        </tr>
+										        <%}%>
+											</table>
+										</td>
+								</tbody>
+							</table>
+							<div class="customRow font10">
+								<span class="col50 textCenter">ALL SUBJECT TO JAIPUR JURISDICTION ONLY</span>
+								<span class="col50 textRight"><strong>For: Vision Freight Solutions India Private Limited</strong></span>
+							</div>
+							<div class="font10">
+								N.B
+								<ol>
+									<li>I/We have carefully read condition of the Company overleaf and declare that the particulars famished above are correct.</li>
+									<li>The consignment by Rules & Regulations of the Company whose vessies and/or truck are engaged.</li>
+									<li>The Company is not respomsible for rebooking after three months.</li>
+								</ol>
+							</div>
+						</div>
+					</div>
+					<div class="customRow font10" style="padding-top:0px;">
+						<span class="col50"><strong>RECEIVED BY</strong></span>
+						<span class="col50 textRight"><strong>BOOKING INCHARGE</strong></span>
+						<div class="tagline">
+						<span>"This is system generated document by vision clouds". All rights reseved to the vision house</span> || 
+						<span>Email:<a href="mailto:vc@thevisionhouse.in">vc@thevisionhouse.in</a></span> ||
+						<span>Website:www.visioncloud.in</span>
+						</div>
+					</div>		
+					</div>
+				<hr class="customHr">
+				<div class="outerDiv1 outerDiv2">
+					<div class="customRowAddress">
+						<div class="col20">
+							<img src="<%=img_url1%>" width="80">
+						</div>						
+						<div class="col80" style="text-align:right;">
+							<h5 style="margin:0;"><%=data[0].billing_name%></h5>
+							<p style="margin:0;"><strong>Regd Office</strong> : <%=data[0].address%></p>
+							<p style="margin:0;"><strong>Coporate Office</strong> : <%=data[0].correspondence_address%></p>
+						</div>
+					</div>
+					<span class="lrQr"><img src="<%=qrUrl%>" class="qr-code img-thumbnail img-responsive" width="35"></span>
+    					<div class="customRow">
+							<div class="col20" style="margin-right:5px;">
+								<table class="lrInvoiceAddress" cellpadding="10">
+									<tr>
+										<td>
+											<div>
+												<div class="textCenter">CAUTION</div>
+												<p>The Consignment will not declared delievered re-routed or re-booked without Consignee Bank's written permission will be delivered at the destination.</p>
+												<div class="textCenter">INSURANCE</div>
+												<p>The Customer as started that Hw has not insured the Consignment or he has insured the Consignment.</p>
+												<p>
+													<ul>
+														<li>Company</li>
+														<li>Policy No.</li>
+														<li>Date</li>
+														<li>Amount</li>
+														<li>Risk</li>
+													</ul>
+												</p>
+												<div class="textCenter">NOTICE</div>
+												<p>The Consignment covered by this set of special Lorry Receiption from shall be started at the destination under the contract of the Transport operator and shall be delivered to or the order of the Lorry Receipt if will under no cirsumstances be delievered to any one without the written authority from the consignee copy or a separate letter of authority.</p>
+												<div class="textCenter">INDORSEMENT</div>
+												<p>It is a intended to us the CONSIGNEE COPY  of this set for the purpose of borrowing from the consignee bank.</p>
+											</div>
+										</td>
+									</tr>
+								</table>
+								<div class="font10">Material recived in good condition</div>
+							</div>
+							<div class="col80">
+								<div class="branchAddress">
+								<!-- <span style="float:left; font-size:14px;"><%=data[0].account_name%></span> -->
+								<span style="float:left">Branch Office: <%=data[0].address%>, GSTN: <%=data[0].gst_number%></span>
+								<span style="float:right;">Consignee Copy</span>
+								</div>
+								<table class="lrInvoiceAddress" cellspacing="0"  cellpadding="10">
+										<tr> 
+											<td style="width:70%;" rowspan="2">
+												<div style="width:80%;">
+												<div>
+													<strong>CONSIGNOR:</strong>
+													<%if(data[0].route_type==1){%>
+													<%=data[0].billing_master_name%>
+													<%}else if(data[0].route_type==2){%>
+													<%=data[0].consignor%>
+													<%}else{%>
+													<%=data[0].consignor%>
+													<%}%>
+												</div>
+												<div>
+													<strong>CONSIGNEE:</strong>
+													<%if(data[0].route_type==1){%>
+													<%=data[0].consignee%>
+													<%}else if(data[0].route_type==2){%>
+													<%=data[0].billing_master_name%>
+													<%}else{%>
+													<%=data[0].consignee%>
+													<%}%>
+												</div>
+												</div>
+											</td>
+											<td valign="top" style="position:relative;">
+												<div>
+													<span>Lr. No. : <%=data[0].lr_slug%></span>
+													<span style="float:right;">Dated : <%=data[0].lr_date%></span>
+												</div>
+											</td>
+										</tr>
+										<tr>					
+											<td>
+												<div class="customRow" style="padding-top:2px;">
+												<div class="col50">From : <%for(var i=0;i<address.length;i++){ if(address[i].type==1){%>
+														<%=(address[i].stock_id!=null)?address[i].city_name: address[i].town%>
+														<%}}%></div>
+												<div class="col50 ellipsis" style="text-align:right;">To : <%for(var i=0;i<address.length;i++){ if(address[i].type==2){%>
+														<%=(address[i].stock_id!=null)?address[i].city_name: address[i].town%>,
+														<%}}%> </div>
+												</div>
+											</td>
+										</tr>
+								</table>
+								<table class="lrInvoiceAddress" cellspacing="0" cellpadding="5">
+									<thead>
+										<th width="60">No. of Pkgs</th>
+										<th>Description (Said to Contain)</th>
+										<th width="100">Sender's Vehicle Detail</th>
+										<th width="100">Rate</th>
+										<th width="50">Freight Rs.</th>
+									</thead>
+									<tbody>
+										<tr>
+											<td rowspan="8">
+												<%for(var i=0;i<data.length;i++){%>
+												<%=data[i].packet_count%>
+												<%if(i!=data.length-1){%>
+												+
+												<%}}%>
+											</td>
+											<td rowspan="8">
+												<%for(var i=0;i<data.length;i++){%>
+												<%=data[i].package_description%>, 
+												<%}%>
+												<div class="customRow" style="margin-top:10px;">
+													<div class="col50">
+														STN No. : <%=data[0].stn_no%><br>
+														LORRY NO. : <%=data[0]. registration_no%><BR>
+														SITE ID FROM :<%for(var i=0;i<address.length;i++){ if(address[i].type==1){%>
+														<%=(address[i].stock_id!=null)?address[i].stock: address[i].site_id%>,
+														<%}}%><BR>
+														LOADING FLOOR :<%for(var i=0;i<address.length;i++){ if(address[i].type!=null){%>
+																<%=address[i].floor%>,
+														<%}}%> <BR>
+														VALUE Rs. : <%=data[0].amount%>
+													</div>
+													<div class="col50">
+														MRN No. <%=data[0].mrn_no%><BR>
+														ESCORT NAME : <%=data[0].escort%><br>
+														TO : <%for(var i=0;i<address.length;i++){ if(address[i].type==2){%>
+														<%=(address[i].stock_id!=null)?address[i].stock: address[i].site_id%>,
+														<%}}%><br>
+														UNLOADING FLOOR : <%for(var i=0;i<address.length;i++){ if(address[i].floor!=null){%>
+																<%=address[i].floor%>,
+														<%}}%><br>
+													</div>
+												</div>
+											</td>
+											<td>
+												<div>Charged KM</div>
+												<div><%=data[0].total_km%></div>
+											</td>
+											<td><%=data[0].lr_category==1?"To be Billed":""%></td>
+											<td></td>
+										</tr>
+										<tr>
+											<td rowspan="7">
+												<div>Charged Weight KG</div>
+												<% var x=0;for(var i=0;i<data.length;i++){%>
+												    <%x = x+data[i].total_weight%>
+												<%}%>
+												<div><%=x%></div>
+												<div>Vehicle Type</div>
+												<div><%=data[0].vehicle_type_name%></div>
+											</td>
+											<td rowspan="7" colspan="2" style="padding:0">
+												<table class="innerTable">
+													<% for(var x in other_info) {%>
+											        <tr>
+											          <th><span><%= x %></span></th>
+											          <td><span><%=other_info[x]%></span></td>
+											        </tr>
+											        <%}%>
+												</table>
+											</td>
+									</tbody>
+								</table>
+								<div class="customRow font10">
+									<span class="col50 textCenter">ALL SUBJECT TO JAIPUR JURISDICTION ONLY</span>
+									<span class="col50 textRight"><strong>For: Vision Freight Solutions India Private Limited</strong></span>
+								</div>
+								<div class="font10">
+									N.B
+									<ol>
+										<li>I/We have carefully read condition of the Company overleaf and declare that the particulars famished above are correct.</li>
+										<li>The consignment by Rules & Regulations of the Company whose vessies and/or truck are engaged.</li>
+										<li>The Company is not respomsible for rebooking after three months.</li>
+									</ol>
+								</div>
+							</div>
+						</div>
+						<div class="customRow font10" style="padding-top:0px;">
+							<span class="col50"><strong>RECEIVED BY</strong></span>
+							<span class="col50 textRight"><strong>BOOKING INCHARGE</strong></span>
+							<div class="tagline">
+							<span>"This is system generated document by vision clouds". All rights reseved to the vision house</span> || 
+							<span>Email:<a href="mailto:vc@thevisionhouse.in">vc@thevisionhouse.in</a></span> ||
+							<span>Website:www.visioncloud.in</span>
+							</div>
+						</div>		
+				</div>
+    		</div>
+    	</div>
+	</section>
+</div>
+</body>
+</html>

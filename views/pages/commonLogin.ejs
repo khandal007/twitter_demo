@@ -1,0 +1,77 @@
+
+<div id="login" v-cloak>
+    <form action="" id="login_form" method="post">
+        <div class="form-group has-feedback">
+            <input type="email" required name="emailAddress" class="form-control" placeholder="Email Address" autocomplete="email" focus-first>
+            <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+        </div>
+        <div class="form-group has-feedback">
+            <input type="password" required name="password" class="form-control" placeholder="Password" autocomplete="current-password">
+            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        </div>
+
+        <!--------------Hidden Form Data--------------->
+        <!-- <input type="hidden" name="_csrf" value="<%= _csrf %>" /> -->
+        <input type="hidden" name="userAuth" id="userAuth"/>
+        <% if( typeof (me) !== 'undefined' ){ %>
+            <input type="hidden" id="currentUserRole" value="<%= me.userRole%>">
+        <% } %>
+        
+        <input type="hidden" name="type" value="1">
+        <div class="row">
+            <div class="col-xs-7">&nbsp;</div>
+            <div class="col-xs-5">
+                <button type="submit" id="btn_submit" class="btn btn-primary btn-raised btn-block btn-flat">Sign In</button>
+            </div>
+        </div>
+    </form>
+  
+
+</div>
+
+
+<script type="text/javascript">
+$( document ).ready(function(e) {
+     if($("#currentUserRole").length > 0){
+        //  var role = $("#currentUserRole").val();
+           window.location.replace("/module/dashboard");
+         // if(role == 65){
+         //     window.location.replace("/super/control-panel");
+         //   } else if(role == 55){
+         //      window.location.replace("/company/control-panel");
+         //  } else if( role == 45){        
+         //      window.location.replace("/control-panel");
+         //  }
+    }
+
+    $("#login_form").submit(function(e){
+        e.preventDefault();
+        var dataSend = $("#login_form").serialize();
+        $.ajax({
+            url: '/secure/login',
+            method: 'PUT',
+            data: dataSend,
+            success: function (data) {
+                if(data.status){
+                    if(data.status == "success"){
+                        if(data.userData.userRole == 65){
+                            window.location.replace("/super/control-panel");
+                        }else if(data.userData.userRole == 55){
+                            window.location.replace("/company/control-panel");
+                        }else{
+                            window.location.replace("/control-panel");
+                        }
+                    } else if(data.status == "error"){
+                        alert(data.message);
+                    }else{
+                        alert("Please try again");
+                    }
+                }
+            },
+            error: function (data){
+                console.log("error"+data);
+            }
+        });
+    })
+});
+</script>

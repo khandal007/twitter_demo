@@ -1,0 +1,139 @@
+﻿<% if(sails.config.project_type != "demo") { %>
+<a id="NeverLeft" title="Menu"><span></span></a>
+<nav class="navLeft">
+    <ul>
+        <li><a href="#" class="active">Document Panel</a></li>
+        <li><a target="_blank" href="<%= url.resolve(sails.config.custom.documentUrl, "/spanel")%>">Super Admin</a></li>
+        <li><a target="_blank" href="<%= url.resolve(sails.config.custom.documentUrl, "/upanel")%>">Admin</a></li>
+        <li><a target="_blank" href="<%= url.resolve(sails.config.custom.documentUrl, "/panel")%>">Moderator</a></li>
+        <li><a target="_blank" href="#">Contact Us</a></li>
+    </ul>
+</nav>
+<%}%>
+
+<a id="Never" title="Menu"><span></span></a>
+<nav class="navRight">
+    <ul>
+        <li><a target="_blank" href="#" class="active">Account Panel</a></li>
+        <li><a target="_blank" href="/loginpanel">Login</a></li>
+       <!--  <li><a target="_blank" href="/spanel">Super Admin</a></li>
+        <li><a target="_blank" href="/upanel">Admin</a></li>
+        <li><a target="_blank" href="/panel">Moderator</a></li> -->
+        <li><a target="_blank" href="#">Contact Us</a></li>
+    </ul>
+</nav>
+
+<script src="/welcome-dependencies/libs/jquery.big-counter.js"></script>
+<script src="/welcome-dependencies/libs/jquery.html5Loader.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#omSlider").height(window.innerHeight);
+	$("<style>#omSlider #caption .tringle.large:after{border-width:" + (window.innerHeight * 1.25) + "px;bottom:-" + (window.innerHeight * 1.25) + "px;}#omSlider #caption .tringle.small:after{border-width:" + window.innerHeight + "px;bottom:-" + window.innerHeight + "px;}#omSlider #caption .white-layer{width:" + (window.innerHeight * 0.1) + "px;top:" + (window.innerHeight * 0.2) + "px;left:" + (window.innerWidth * 0.2) + "px;}#omSlider #caption .white-layer-inner{border-width:" + (window.innerHeight * 0.175) + "px;left:-" + (window.innerHeight * 0.175) + "px;top:-" + (window.innerHeight * 0.175) + "px;}</style>").appendTo("head");
+});
+$(window).resize(function(){
+	$("#omSlider").height(window.innerHeight);
+	$("<style>#omSlider #caption .tringle.large:after{border-width:" + (window.innerHeight * 1.25) + "px;bottom:-" + (window.innerHeight * 1.25) + "px;}#omSlider #caption .tringle.small:after{border-width:" + window.innerHeight + "px;bottom:-" + window.innerHeight + "px;}#omSlider #caption .white-layer{width:" + (window.innerHeight * 0.1) + "px;top:" + (window.innerHeight * 0.2) + "px;left:" + (window.innerWidth * 0.2) + "px;}#omSlider #caption .white-layer-inner{border-width:" + (window.innerHeight * 0.175) + "px;left:-" + (window.innerHeight * 0.175) + "px;top:-" + (window.innerHeight * 0.175) + "px;}</style>").appendTo("head");
+});
+</script>
+
+
+<section id="omSlider"
+	class="cycle-slideshow"
+	data-cycle-timeout="10000"
+	data-cycle-caption="#caption"
+	data-cycle-caption-template="
+		<div class='bgImage' style='background-image:url({{src}})'></div>
+		<div class='slidebox'>{{cycleSlidebox}}</div>
+		<div class='tringle large'></div>
+		<div class='tringle small'></div>
+		<div class='white-layer'>
+			<div class='white-layer-inner'></div>
+		</div>
+		<div class='contentBox'>
+			<h1>{{cycleTitle}}</h1>
+			<p class='tagline'>{{cycleTagline}}</p>
+			<h3>{{cycleSubheading}}</h3>
+			<p>{{cycleDesc}}</p>
+		</div>
+	">
+    <img src="/welcome-dependencies/images/slider/web-design.jpg"
+		 data-cycle-title="<%=sails.config.constants.site_name%>"
+		 data-cycle-tagline="Discovered a world of Functionality."
+		 data-cycle-subheading="Open Source"
+		 data-cycle-desc="Its a cloud solution for all transactions and invoicing. It also stores all documents over cloud so those can accessible anytime anywhere"
+		 data-cycle-href="#"
+		 data-cycle-slidebox="
+		 	<div class='bulb'><div class='bulb-power'></div></div>
+		 	<div class='gear'></div>
+			<div class='meter'><div class='meter-pin'></div></div>
+			<div class='meter'><div class='meter-pin'></div></div>
+			<div class='folder'>
+				<div class='folder-inside'></div>
+				<div class='folder-file'></div>
+				<div class='folder-default'></div>
+				<div class='folder-light1'></div>
+				<div class='folder-light2'></div>
+				<div class='folder-light3'></div>
+				<div class='folder-lines'></div>
+				<div class='folder-light4'></div>
+			</div>
+			<div class='responsive-layout'>
+				<div class='responsive-desktop'></div>
+				<div class='responsive-tablet'></div>
+				<div class='responsive-mobile'></div>
+			</div>
+		 	<div class='lens'><div class='lens-active'></div></div>
+		 	<div class='laptop'>
+				<div class='laptop-slides'></div>
+			</div>
+		 	<div class='scale'></div>
+		 "
+	/>
+    <!--<img src="images/slider/web-design.jpg"
+		 data-cycle-title="Website Development"
+		 data-cycle-tagline="Discovered a world of Creativity."
+		 data-cycle-subheading="Responsive Design"
+		 data-cycle-desc="By getting to know your audience we create a better user experience. With over 200 devices available on the market it is important we make responsive website that work seamlessly on all devices."
+		 data-cycle-href="#"
+	/>-->
+    <p class="cycle-pager"></p>
+    <div id="caption"></div>
+</section>
+<style>
+</style>
+
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-7">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--<div id="coverPage">
+    <div id="catalyst">
+        <img src="images/the-catalyst-logo.png">
+        <div class="counter"> </div>
+    </div>
+</div>-->
+
+<!--<script type="text/javascript">
+var loaderAnimation = $("#coverPage").LoaderAnimation();
+$.html5Loader({
+	filesToLoad:'libs/files.json',
+	onUpdate: loaderAnimation.update
+});
+</script>-->
+
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 cAlign">
+               <span>&copy; <% var d = new Date(); var n = d.getFullYear(); %> <%= n %> The Catalyst</span>
+               <span>|</span>
+               <span>All rights reserved.</span>
+            </div>
+        </div>
+    </div>
+</footer>

@@ -1,0 +1,64 @@
+
+<aside class="main-sidebar">
+    <section class="sidebar">
+        <div class="user-panel">
+            <div class="pull-left image">
+                <img <%if (req.me.avatar==''||req.me.avatar==null){%> src="/admin-dependencies/dist/img/user-160x160.jpg"<%}else{%> src="/uploads/images/avatar/<%=me.id%>/<%=me.avatar%>" <%}%> class="img-circle" alt="User Image">
+            </div>
+            <div class="pull-left info">
+                <p><%= me.fullName%></p>
+                <a href="#"><i class="fa fa-circle text-success"></i> <%=__('online')%></a>
+            </div>
+        </div>
+          
+        <ul class="sidebar-menu" data-widget="tree">
+            <li class="header"><%=__('main_navigation')%></li>
+            <li><a href="/dashboard"><i class="fa fa-th"></i> <span><%=__('dashboard')%></span></a></li>
+            <!-- <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-dashboard"></i> <span>Master</span>
+                    <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href=""><i class="fa fa-circle-o"></i> Country </a></li>
+                    <li><a href=""><i class="fa fa-circle-o"></i> State </a></li>
+                    <li><a href=""><i class="fa fa-circle-o"></i> City </a></li>
+                </ul>
+            </li> -->
+            <li class="<%= (req.path === '/master/companyList') || (req.path === '/master/createCompany') ? 'active' : '' %> treeview"> 
+                <a href="#">
+                    <i class="fa fa-building"></i> <span><%=__('companies')%></span>
+                    <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                </a>
+                <ul class="treeview-menu">
+                    <li <% if (req.path === '/master/companyList') { %> class="active" <% } %>><a href="/master/companyList"><i class="fa fa-circle-o"></i> <%=__('all_companies')%> </a></li>
+                    <li <% if (req.path === '/master/createCompany') { %> class="active" <% } %>><a href="/master/createCompany"><i class="fa fa-circle-o"></i> <%=__('add_new_company')%> </a></li>
+                </ul>
+            </li>
+            <li class="<%= (req.path === '/master/createUser') || (req.path === '/master/companyAdminList') ? 'active' : '' %> treeview"> 
+                <a href="#">
+                    <i class="fa fa-users"></i> <span><%=__('users')%></span>
+                    <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                </a>
+                <ul class="treeview-menu">
+                    <li <% if (req.url === '/master/companyAdminList') { %> class="active" <% } %>><a href="/master/companyAdminList"><i class="fa fa-circle-o"></i> <%=__('company_admin')%> </a></li>
+                    <li <% if (req.url === '/master/companyAdminList?moderator=1') { %> class="active" <% } %>><a href="/master/companyAdminList?moderator=1"><i class="fa fa-circle-o"></i> <%=__('company_moderators')%> </a></li>
+                    <!-- <li <% if (req.path === '/master/createUser') { %> class="active" <% } %>><a href="/master/createUser"><i class="fa fa-circle-o"></i> Create Users </a></li> -->
+                </ul>
+            </li>
+            <li class="<%= (req.path === '/master/fieldtype') ? 'active' : '' %> treeview"> 
+                <a href="#">
+                    <i class="fa fa-wpforms"></i> <span><%=__('forms')%></span>
+                    <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                </a>
+                <ul class="treeview-menu">
+                    <li <% if (req.path === '/master/fieldtype') { %> class="active" <% } %>><a href="/master/fieldtype"><i class="fa fa-circle-o"></i> <%=__('all_forms')%> </a></li>
+                    <li><a href=""><i class="fa fa-circle-o"></i> <%=__('generate_forms')%> </a></li>
+                </ul>
+            </li>
+
+        </ul>
+    </section>
+</aside>
+
+   

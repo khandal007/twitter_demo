@@ -1,0 +1,83 @@
+ <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">Quick Links</h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+              </div>
+            </div>
+          <div class="box-body">
+            <div class="row">
+              <% totalObj.map(function (cnt,i){  
+                var bgColor = "bg-blue-gradient";
+                var href = "";
+                var isShow = true;
+                var dashboardHref = `/jumpToDashboard?mode=${cnt.id}`;
+
+                  if(cnt.category == 'Transaction'){
+                    bgColor = "bg-teal-gradient";
+                    if(cnt.id == 2){
+                      href = `/form/registeredform?mode=grn&modetype=${cnt.id}`;
+                    }else{
+                      href = `/form/transactionForm?mode=${cnt.id}`;
+                    }
+                  }else if(cnt.category == 'Payment'){
+                    bgColor = "bg-red-gradient";
+                    href = `/form/transactionForm?mode=${cnt.id}`;
+                  }else if(cnt.category == 'Inventory'){
+                    bgColor = "bg-blue-gradient";
+                    href = `/invoice/entries?mode=${cnt.modeName.toLowerCase()}`;
+                  }else if(cnt.category == 'Revenue'){
+                    if(req.me.userRole != 65){
+                      isShow = false;
+                    }
+                    bgColor = "bg-yellow-gradient";
+                    dashboardHref = `/revenueList?type=3`;
+                    href = `/revenue/invoiceBill?mode=grn&type=rev`;
+                  }else{
+                    bgColor = "bg-blue";
+                  }
+
+                  if(req.me.userRole != 65 && (req.me.userLogin.indexOf(cnt.id*7) == -1)){
+                    isShow = false;
+                  }
+
+                 if(isShow){
+                %>
+                  
+                 <div class="col-sm-2 col-xs-12">
+                  <div class="info-box quicklinks" title="<%=cnt.modeName%>">
+                  <span class="info-box-icon <%=bgColor%>" onclick="window.location.replace('<%=href%>');"><i class="fa fa-plus"></i></span>
+                  <div class="info-box-content" style="padding-right:23px;" onclick="window.location.replace('<%=dashboardHref%>');">
+                    <span class="info-box-text" style="font-size: 16px; font-weight: bold;"><%=cnt.modeName%></span>
+                    <span class="info-box-text"><%=cnt.category.toUpperCase()%></span>
+                       <span class="progress-description">
+                        </span>
+                        <%if(cnt.pending_tr!=0){%>
+                        <span title="<%=cnt.pending_tr %> pending reuirements" class="bookMark"><%=cnt.pending_tr %></span>
+                        <%}%>
+                    </div>
+                   
+                    <!-- /.info-box-content -->
+                  </div>
+                 </div>
+                 <% } isShow = true; }) %>
+                 <% if(req.me.userRole == 65 || (req.me.userLogin.indexOf(100) != -1)){%>
+                 <div class="col-sm-2">
+                   <div class="info-box quicklinks">
+                    <a href="/lrEntry" class="text-white"><span class="info-box-icon bg-green-gradient"><i class="fa fa-plus"></i></span></a>
+                     <div class="info-box-content" style="padding-right:23px;">
+                    <a href="/getLrEntries" style="color:#333;"><span class="info-box-text" style="font-size: 16px; font-weight: bold;">LR Entry</span></a>
+                    <span class="info-box-text">Inventory</span>
+                       <span class="progress-description">
+                        </span>
+                    </div>
+                   </div>
+                 </div>
+                 <%}%>
+
+              </div>
+
+             </div>
+           </div> 

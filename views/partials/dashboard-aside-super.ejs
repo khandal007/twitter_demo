@@ -1,0 +1,49 @@
+
+<aside class="main-sidebar">
+    <section class="sidebar">
+        <div class="user-panel">
+            <div class="pull-left image">
+                <img <%if (req.me.avatar==''||req.me.avatar==null){%> src="/admin-dependencies/dist/img/user-160x160.jpg"<%}else{%> src="/uploads/images/avatar/<%=me.id%>/<%=me.avatar%>" <%}%> class="img-circle" alt="User Image">
+            </div>
+            <div class="pull-left info">
+                <p><%= req.me.fullName%></p>
+                <a href="#"><i class="fa fa-circle text-success"></i><%=__('online')%></a>
+                <a href="#"><i class="fa fa-circle text-success"></i>Super Admin</a>
+            </div>
+        </div>
+
+        <ul class="sidebar-menu" data-widget="tree">
+            <li><a href="/homepage"><i class="fa fa-th"></i> <span>Dashboard</span></a></li>
+            <% if(req.me.userRole == 65){%>
+            <li><a href="/tweetLogs"><i class="fa fa-book"></i> <span>Logs</span></a></li>
+            <%}%>
+
+            <% if(req.me.userRole == 65){%>
+            <li class="<%= (req.path === '/master/createUser') || (req.path === '/master/companyAdminList') ? 'active' : '' %> treeview">
+                <a href="#">
+                    <i class="fa fa-users"></i> <span><%=__('users')%></span>
+                    <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                </a>
+                
+                <ul class="treeview-menu">
+                    <li <% if (req.url === '/master/companyAdminList?moderator=2') { %> class="active" <% } %>><a href="/master/companyAdminList?moderator=2"><i class="fa fa-circle-o"></i>Super Admin</a></li>
+                    
+                    <li <% if (req.url === '/master/companyAdminList') { %> class="active" <% } %>><a href="/master/companyAdminList"><i class="fa fa-circle-o"></i> <%=__('company_admin')%> </a></li>
+                    <li <% if (req.url === '/master/companyAdminList?moderator=1') { %> class="active" <% } %>><a href="/master/companyAdminList?moderator=1"><i class="fa fa-circle-o"></i><%=__('company_moderators')%></a></li>
+                    <li <% if (req.url === '/currentLogin') { %> class="active" <% } %>><a href="/currentLogin"><i class="fa fa-circle-o"></i>Login Users</a></li>
+
+                </ul>
+                </li>
+            <%}%>
+
+
+          <!--   <li class="<%= (req.path === '/transaction/bulkLogs?module=1') ? 'active' : '' %>">
+                <a href="/transaction/bulkLogs?module=1">
+                    <i class="fa fa-upload"></i> <span>Bulk Uploads</span>
+                </a>
+
+            </li> -->
+
+        </ul>
+    </section>
+</aside>

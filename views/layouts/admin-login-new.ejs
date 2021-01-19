@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title><%= sails.config.constants.site_name %> | Log in</title>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link href="https://fonts.googleapis.com/css?family=Oswald:300,400,500,600,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/admin-dependencies/bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/admin-dependencies/dist/css/style.css">
+  <link rel="stylesheet" href="/admin-dependencies/bower_components/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/admin-dependencies/bower_components/Ionicons/css/ionicons.min.css">
+  <link rel="stylesheet" href="/admin-dependencies/dist/css/AdminLTE.css">
+  <link rel="stylesheet" href="/admin-dependencies/dist/css/bootstrap-material-design.min.css">
+  <link rel="stylesheet" href="/admin-dependencies/dist/css/ripples.min.css">
+  <link rel="stylesheet" href="/admin-dependencies/dist/css/MaterialAdminLTE.min.css">
+  <link rel="icon" href="/admin-dependencies/dist/img/favicon.png" type="image/gif" sizes="32x32">
+  <script src="/admin-dependencies/bower_components/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
+</head>
+<body class="hold-transition">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-8 textureDesign">
+        <div class="textureDesignOverlay">
+          <h3>Welcome to,</h3>
+          <h1><%=sails.config.constants.site_name%></h1>
+          <div style="font-size:40px;">Keep posting with us </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div style="margin-top:40%;">
+          <div class="text-center"><a href="/"><!-- <img src="/admin-dependencies/dist/img/final-logo.png" width="200px;"> --></a></div>
+          <div class="loginPadding">
+              <h3 class="text-center loginHeading">Sign in to start your session</h3>
+              <%- body %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<script src="/admin-dependencies/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/admin-dependencies/dist/js/material.min.js"></script>
+<script src="/admin-dependencies/dist/js/ripples.min.js"></script>
+<script src="/dependencies/sails.io.js"></script>
+<script src="/dependencies/bowser.js"></script>
+<script src="/dependencies/vue.js"></script>
+
+<script type="text/javascript">
+    var pageURL = window.location.href;
+    var lastURLSegment = pageURL.substr(pageURL.lastIndexOf('/') + 1);
+    if (lastURLSegment == 'spanel') {
+
+        $(".ModuleName").html("Super Admin Login");
+        $("#userAuth").val('65');
+        $(".login-box-body").addClass('spanelBox');
+
+    } else if (lastURLSegment == 'upanel') {
+
+        $(".ModuleName").html("Company Admin Login");
+        $("#userAuth").val('55');
+        $(".admin_login").hide();
+        //$(".moderator_login").hide();
+         $(".login-box-body").addClass('upanelBox');
+
+
+    } else if (lastURLSegment == 'panel') {
+
+        $(".ModuleName").html("Moderator Login");
+        $("#userAuth").val('45');
+        $(".admin_login").hide();
+        $(".moderator_login").hide();
+        $(".ordiv").hide();
+
+    }
+</script>
+
+</html>

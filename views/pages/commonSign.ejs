@@ -1,0 +1,148 @@
+<style type="text/css">
+    #login form input.form-control { color:#333; font-weight:500;}
+</style>
+<div id="login" v-cloak>
+    <form action="" id="login_form" method="post">
+        <div class="form-group has-feedback">
+            <input type="email" required name="emailAddress" class="form-control" placeholder="Email Address" autocomplete="email" focus-first>
+            <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+        </div>
+        <div class="form-group has-feedback">
+            <input type="password" required name="password" class="form-control" placeholder="Password" autocomplete="current-password">
+            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        </div>
+        <div class="forgot-password-option" id="forgotpass">
+          <a href="javascript:void(0)" class="text-decoration-none text-primary">Forgot Password?</a>
+        </div>
+
+        <!--------------Hidden Form Data--------------->
+        <!-- <input type="hidden" name="_csrf" value="<%= _csrf %>" /> -->
+        <input type="hidden" name="userAuth" id="userAuth"/>
+        <% if( typeof (me) !== 'undefined' ){ %>
+            <input type="hidden" id="currentUserRole" value="<%= me.userRole%>">
+        <% } %>
+        
+        <input type="hidden" name="type" value="1">
+        <div class="row">
+            <!-- <div class="col-xs-7">&nbsp;</div> -->
+            <div class="col-sm-12">
+                <button type="submit" id="btn_submit" class="signinBtn btn btn-primary btn-raised btn-block btn-flat" style="color:#fff; background:rgb(84, 178, 220); padding:10px 0;">Sign In</button>
+            </div>
+            <div class="col-sm-12">
+                <a class="addUser btn btn-primary btn-raised btn-block btn-flat" href="/master/createUser" style="color:#fff; background:rgb(84, 178, 220); padding:10px 0;"> Sign Up
+                  </a>
+                
+            </div>
+        </div>
+    </form>
+
+    <div class="col-lg-12 col-md-12 bg-white px-4 pt-3" id="forgotForm" style="display: none;">
+      <form action="" id="forgot_form" method="post">
+      <h4 class="mb-2 card-title">Recover Password</h4>
+      <p class="card-text mb-3">
+        Please enter your email address and we'll send you
+        instructions on how to reset your password.
+      </p>
+
+      <input type="hidden" name="_csrf" value="<%= _csrf %>" />
+
+      <input type="email" class="form-control mb-3" required name="emailAddress" placeholder="Email Address" autocomplete="email" focus-first />
+      <div class="fg-actions d-flex justify-content-between">
+        <span class="recover-pass">
+          <button class="btn btn-primary bg-blue" type="submit" style="padding:5px 10px;">Recover</button>
+        </span>
+        <span class="login-btn">
+          <button class="btn btn-primary bg-green" id="sign_in" style="padding:5px 10px;">
+            <a href="javascript:void(0)" class="text-decoration-none text-white">Back To Login</a>
+          </button>
+        </span>
+      </div>
+      <div class="d-flex justify-content-between">
+        <p class="card-text mb-3"> Copyright© <span id="CurrentYear"></span> <%= sails.config.constants.site_name %> </p>
+      </div>
+      
+      </form>
+    </div>
+  
+
+</div>
+
+
+<script type="text/javascript">
+$( document ).ready(function(e) {
+     if($("#currentUserRole").length > 0){
+        //  var role = $("#currentUserRole").val();
+           window.location.replace("/module/dashboard");
+         // if(role == 65){
+         //     window.location.replace("/super/control-panel");
+         //   } else if(role == 55){
+         //      window.location.replace("/company/control-panel");
+         //  } else if( role == 45){        
+         //      window.location.replace("/control-panel");
+         //  }
+    }
+
+    $("#login_form").submit(function(e){
+        e.preventDefault();
+        var dataSend = $("#login_form").serialize();
+        $.ajax({
+            url: '/secure/login',
+            method: 'PUT',
+            data: dataSend,
+            success: function (data) {
+                if(data.status){
+                    if(data.status == "success"){
+                        $.cookie('token', data.userData.token);
+                        if(data.userData.userRole == 65){
+                            window.location.replace("/super/control-panel");
+                        }else if(data.userData.userRole == 55){
+                            window.location.replace("/company/control-panel");
+                        }else{
+                            window.location.replace("/control-panel");
+                        }
+                    } else if(data.status == "error"){
+                        alert(data.message);
+                    }else{
+                        alert("Please try again");
+                    }
+                }
+            },
+            error: function (data){
+                console.log("error"+data);
+            }
+        });
+    })
+});
+$('#forgotpass').click(function() { 
+        $("#login_form").slideUp('slow');
+        $("#forgotForm").slideDown('slow');  
+    });
+$('#sign_in').click(function() { 
+        $("#forgotForm").slideUp();
+        $("#login_form").slideDown();
+    });
+$("#forgot_form").submit(function(e){
+        e.preventDefault();
+        var dataSend = $("#forgot_form").serialize();
+        $.ajax({
+            url: '/send-password-recovery-email',
+            method: 'PUT',
+            data: dataSend,
+            success: function (data) {
+                if(data.status){
+                    if(data.status == "success"){
+                        alert(data.message); setTimeout(function(){ window.location.replace(""); }, 1000);
+                    window.location.replace("");
+                    } else if(data.status == "error"){
+                        alert(data.message);
+                    }else{
+                        alert("Please try again");
+                    }
+                }
+            },
+            error: function (data){
+                console.log(data);
+            }
+        });
+    })
+</script>

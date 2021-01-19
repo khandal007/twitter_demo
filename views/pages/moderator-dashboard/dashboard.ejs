@@ -1,0 +1,186 @@
+
+<!---------- Moderator Dashboard Aside ----------->
+<%- partial('../../partials/dashboard-aside-moderator.ejs') %>
+
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  
+  <%- partial('../../partials/dashboard-breadcrumb.ejs') %>
+
+   <section class="content">
+    <div class="row">
+   
+   
+       <div class="col-md-6">
+          
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">Latest Done Transactions</h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                 <button onclick="window.location.replace('/form/entries?type=1')" type="button" class="btn btn-box-tool"><i class="fa fa-eye"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->  
+          <div class="box-body">
+              <div class="table-responsive">
+                <table class="table no-margin" id="doneTable">
+                  <thead>
+                  <tr>
+                    <th>Head</th>
+                    <th>Mode</th>
+                    <th>Date</th>
+                    <th style="display:none;">uid</th>
+                     <th><span class="label label-success">Credit</span></th>
+                    <th><span class="label label-danger">Debit</span></th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                    <% latestTransaction.forEach(function(data,i){ %>
+                  <tr onclick="showData(<%= data.id %>,1)">
+                    <td><%= data.transaction_head %></td>
+                    <td><%= data.transaction_mode %></td>
+                    <td><%= data.transaction_date %></td>
+                     <td style="display:none;"><%= data.unique_id %></td>
+                    <td><strong><%= data.transaction_cr_amount %></strong></td>
+                    <td><strong><%= data.transaction_dr_amount %></strong></td>
+                   
+                  </tr>
+                  <% }); %>
+                 
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.table-responsive -->
+            </div>
+            <!-- /.box-body -->
+            
+            <!-- /.box-footer -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+     
+    
+        <div class="col-md-6">
+            <!-- TABLE: LATEST ORDERS -->
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">Ready for Proceed</h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                 <button type="button" onclick="window.location.replace('/form/entries?type=2')" class="btn btn-box-tool"><i class="fa fa-eye"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->  
+          <div class="box-body">
+              <div class="table-responsive">
+                  <table class="table no-margin" id="holdTable">
+                  <thead>
+                  <tr>
+                    <th>Head</th>
+                    <th>Mode</th>
+                    <th>Date</th>
+                     <th style="display:none;">uid</th>
+                    <th><span class="label label-success">Credit</span></th>
+                    <th><span class="label label-danger">Debit</span></th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                    <% approveTransaction.forEach(function(data,i){ %>
+                  <tr onclick="showData(<%= data.id %>,2)">
+                    <td><%= data.transaction_head %></td>
+                    <td><%= data.transaction_mode %></td>
+                    <td><%= data.transaction_date %></td>
+                    <td style="display:none;"><%= data.unique_id %></td>
+                    <td><strong><%= data.transaction_cr_amount %></strong></td>
+                    <td><strong><%= data.transaction_dr_amount %></strong></td>
+                   
+                  </tr>
+                  <% }); %>
+                 
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.table-responsive -->
+            </div>
+            <!-- /.box-body -->
+            
+            <!-- /.box-footer -->
+          </div>
+          <!-- /.box -->
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">My Requirements</h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" onclick="window.location.replace('/form/entries?type=3')" class="btn btn-box-tool"><i class="fa fa-eye"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->  
+          <div class="box-body">
+              <div class="table-responsive">
+               <table class="table no-margin" id="reqTable">
+                  <thead>
+                  <tr>
+                    <th>Head</th>
+                    <th>Mode</th>
+                    <th>Date</th>
+                    <th style="display:none;">uid</th>
+                    <th><span class="label label-success">Credit</span></th>
+                    <th><span class="label label-danger">Debit</span></th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                    <% requestTransaction.forEach(function(data,i){ %>
+                  <tr onclick="showData(<%= data.id %>,3)">
+                    <td><%= data.transaction_head %></td>
+                    <td><%= data.transaction_mode %></td>
+                    <td><%= data.transaction_date %></td>
+                    <td style="display:none;"><%= data.unique_id %></td>
+                    <td><strong><%= data.transaction_cr_amount %></strong></td>
+                    <td><strong><%= data.transaction_dr_amount %></strong></td>
+                   
+                  </tr>
+                  <% }); %>
+                 
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.table-responsive -->
+            </div>
+            <!-- /.box-body -->
+            
+            <!-- /.box-footer -->
+          </div>
+          <!-- /.box -->
+        
+        </div>
+       
+      <div>
+    </section>
+</div>
+<!-- /.content-wrapper -->
+<%- partial('../../partials/edit-transaction.ejs') %>
+<script src="/admin-dependencies/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+
+<script src="/admin-dependencies/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="/admin-dependencies/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+<script type="text/javascript">
+    $(document).ready(function(e){
+      $("#doneTable").DataTable({ordering : false});
+      $("#holdTable").DataTable({ordering : false,pageLength:5});
+      $("#reqTable").DataTable({ordering : false,pageLength:5});
+    });
+
+</script>
+
+

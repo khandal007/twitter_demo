@@ -1,0 +1,194 @@
+<style>
+    .example-modal .modal {
+      position: relative;
+      top: auto;
+      bottom: auto;
+      right: auto;
+      left: auto;
+      display: block;
+      z-index: 1;
+    }
+
+    .example-modal .modal {
+      background: transparent !important;
+    }
+  </style>
+<!--******** Moderator Dashboard Aside *********** -->
+
+<% if(me.userRole == 65){%>
+<%- partial('../../../partials/dashboard-aside-super.ejs') %>
+<% }else if(me.userRole == 55){%>
+<%- partial('../../../partials/dashboard-aside-admin.ejs') %>
+<% }else{%>
+<%- partial('../../../partials/dashboard-aside-moderator.ejs') %>
+<%}%>
+
+<div class="content-wrapper">
+    <section class="content">
+        <div class="row">
+        <div class="col-md-12">
+          <div class="box">
+            <div class="box-header">
+             
+              <div class="row">
+                <div class="col-md-6">
+                  <h3 class="box-title"><%=__('List Of Assigned Users')%></h3>
+                </div>
+                <div class="col-md-6 text-right">
+                  <a class="addUser" href="/form/form-view" title="Back To Form List">Back</a>   |  <a class="addUser" href="" data-toggle="modal" data-target="#modal-default-assign" ><i class="ionicons ion-person-add"></i> <%=__('Assign Form')%></a>
+                </div>
+              </div>
+              
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table id="example2" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th><%=__('s_no.')%></th>
+                  <th><%=__('name')%></th>
+                  <th><%=__('email_id')%></th>
+                  <th><%=__('action')%></th>
+                </tr>
+                </thead>
+                <tbody>
+                <% companyUserList.forEach(function(data,i){ %>
+                    <tr>
+                      <td><%= i+1 %></td>
+                      <td><%= data.fullName %></td>
+                      <td><%= data.emailAddress %></td>
+                      <td><a href="#" id="deleteicon" data-toggle="modal" data-target="#modal-default-delete" onclick="storeAssignId(<%=data.id%>)"><i class="fa fa-trash"></i></a></td>
+                    </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+              <input type="hidden" name="_csrf" id='_csrf' value="<%= _csrf %>" />
+              <input type="hidden" name="deleteId" id='deleteId' />
+              <input type="hidden" name="languageCode" id='languageCode' value="<%= req.me.languagePreference %>"/>
+            </div>
+            <!-- /.box-body -->
+          </div>
+        </div>
+        </div>
+    </section>
+</div>
+
+<div class="modal fade" id="modal-default-assign">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title"><%=__('Assign Form')%></h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label><%=__('Select users to assign form')%></label>
+          <select class="form-control select2" name='selectUsers' id='selectUsers' multiple="multiple" data-placeholder="Select Users" style="width: 100%;">
+              <% userList.forEach(function(data,i){ %>
+                <option value='<%= data.id%>'><%= data.fullName %></option>
+              <% }); %>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default " data-dismiss="modal"><%=__('cancel')%></button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="assignFrom()"><%=__('Assign')%></button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="modal-default-delete">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title"><%=__('confirm_delete')%></h4>
+      </div>
+      <div class="modal-body">
+        <p><%=__('Are you sure you want to deallocate form from this user')%>?&hellip;</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default " data-dismiss="modal"><%=__('cancel')%></button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="deallocateForm()"><%=__('Deallocate')%></button>
+      </div>
+    </div>
+  </div>
+</div>
+  <script type="text/javascript">
+    $(document).ready(function(e){
+      $('.select2').select2()
+      $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+        checkboxClass: 'icheckbox_flat-green',
+        radioClass   : 'iradio_flat-green'
+      })
+      var datatableObj={
+        'paging'      : true,
+        'lengthChange': true,
+        'searching'   : true,
+        'ordering'    : true,
+        'info'        : true,
+        'autoWidth'   : false
+      }
+      var language= {
+        "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Portuguese.json"
+      }
+       if($("#languageCode").val()=='pt'){
+        datatableObj.language = language;
+       } 
+
+      $('#example2').DataTable(datatableObj)
+    })
+
+    function assignFrom(){
+      let user_id=$('#selectUsers').val()
+      let url_string = window.location.href;
+      let url = new URL(url_string);
+      let form_id = url.searchParams.get('formId');
+      let company_id = url.searchParams.get('companyId');
+      var dataObj={
+        "user_id":user_id,
+        "form_id":form_id,
+        "company_id":company_id,
+        "_csrf":$('#_csrf').val()
+      };
+      console.log("dataObj",dataObj)
+      $.ajax({
+            type: "POST",
+            url: "/form/assignForms",
+            data:dataObj,
+            dataType: 'json',
+            success: function (data) {
+              console.log("data",data)
+              window.location.replace(`/form/allocated-users?formId=${data.assignedUserList.form_id}&companyId=${company_id}`);
+            },
+            error: function (data) {
+              console.log('An error occurred.');
+            },
+        });
+    }
+    function storeAssignId(id){
+        $("#deleteId").attr({"value":id}) ;
+    }
+    function deallocateForm(){
+      let id = $("#deleteId").val();
+        $("#deleteId").value='';
+      let url_string = window.location.href;
+      let url = new URL(url_string);
+      let form_id = url.searchParams.get('formId');
+      let company_id = url.searchParams.get('companyId');
+        $.ajax({
+            type: "DELETE",
+            url: "/form/deallocateAssignedForm",
+            data:{"user_id":id,"_csrf":$("#_csrf").val(),"form_id":form_id},
+            dataType: 'json',
+            success: function (data) {
+              window.location.replace(`/form/allocated-users?formId=${form_id}&companyId=${company_id}`);
+            },
+            error: function (data) {
+              console.log('An error occurred.');
+            },
+        });
+    }
+  </script>

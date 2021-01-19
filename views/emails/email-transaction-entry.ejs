@@ -1,0 +1,11 @@
+<% /* Note: This is injected into `views/layouts/layout-email.ejs` */ %>
+<p style="margin-bottom: 25px;">New transaction made :</p>
+<p style="margin-bottom: 25px;">Transaction, <b><%= tr_unique_id %></b></p>
+<p>Head:<b><%= tr_head_name%></b><br>Type: <b><%= tr_type %></b></p>
+<p>Date:<b><%= tr_date %></b><br>Amount: <b><%= tr_amount %></b></p>
+<p>Mode:<b><%= tr_mode %></b><br>Status: <b><%= tr_status %></b></p>
+<p>Created By:<b><%= tr_createdBy %></b><br>Remark: <b><%= tr_mark %></b></p>
+
+<p style="margin-bottom: 25px;">If you have any trouble, please check in the panel: <a style="color: #00ACC4; word-wrap: break-word;" href="<%= url.resolve(sails.config.custom.baseUrl,'/spanel') %>"><%= url.resolve(sails.config.custom.baseUrl,'/spanel') %></a></p>
+<p style="margin-bottom: 5px;">Sincerely,</p>
+<p style="margin-top: 0px;">The Catalyst india Team</p>

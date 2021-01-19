@@ -1,0 +1,93 @@
+<% if(req.me.userRole == 65) { %>
+<%- partial('../../partials/dashboard-aside-super.ejs') %>
+<% } else if(req.me.userRole == 55){ %>
+<%- partial('../../partials/dashboard-aside-admin.ejs') %>
+<% }else{ %>
+<%- partial('../../partials/dashboard-aside-moderator.ejs') %>
+<% } %>
+<div class="content-wrapper">
+	<section class="content">
+		<div class="box">
+			<div class="box-body">
+				<div class="row">
+					<div class="col-sm-12">
+						<h2>Write a Post</h2>
+						<form id="tweet">
+							<div class="form-group">
+								<textarea class="form-control" id="user_post" placeholder="Write a Tweet"></textarea>
+							</div>
+							<button type="submit" class="btn btn-raised btn-primary pull-right">Post</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="box">
+			<div class="box-body">
+				<div class="row">
+					<div class="col-sm-12">
+						<div style="width:100%; display: inline-block; float:left;" class="margin-1em-bottom">
+							<span class="pull-left"><h4 style="margin:0px;"></h4></span>
+							<span class="pull-right"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></span>
+						</div>
+						<div class="text-content">
+							<table class="table">
+								<thead>
+									<th>User Name</th>
+									<th>Tweet</th>
+									<th>Updated Tweet</th>
+									<th>Date</th>
+									<th>Approve</th>
+									<th>Action</th>
+								</thead>
+								<tbody>
+									<%data.map(function(res){%>
+									<tr>
+									<td><%=res.fullName%></td>
+									<td><%=res.tweet%></td>
+									<td><%=res.update_tweet%></td>
+									<td><%=res.date%></td>
+									<td><%=res.isApprove == 1 ? 'Approved' : res.isApprove == 3 ? 'Pending':'Disapproved'%></td>
+									<td>
+										<%if(res.isApprove == 3){
+											if(res.request_name ==1 ){
+											%>
+											<a onclick="approve(1,11,<%=res.tweet_id%>)">Delete Request</a>
+											<%} else{%> 
+											<a onclick="approve(1,22,<%=res.tweet_id%>)">Update Request</a>
+											<%}%> |
+											<a onclick="approve(2,11,<%=res.tweet_id%>)">Disapprove</a>
+										<%}%>
+									</td>
+									</tr>
+								<%})%>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>
+<script type="text/javascript">
+	function approve(approve,editDel,tweetId){
+		if(editDel == 22){
+			var delurl = '/updateTweet';
+		} else {
+			var delurl = "/deleteTweet";
+		}
+		$.ajax({
+			type:"POST",
+			url:delurl,
+			data:{tweet_id:tweetId,isApprove:approve},
+			datatype:'json',
+			success: function (res) {
+	      	if(res.status == true){
+	      		alert('Successfull');
+	      		location.reload();
+	      	}
+	      }
+		});
+	}
+</script>

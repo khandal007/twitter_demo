@@ -1,0 +1,26 @@
+# Add any directories, files, or patterns you don't want to be tracked by version control
+node_modules
+assets/admin-dependencies/bower_components
+assets/admin-dependencies/dist/js
+assets/admin-dependencies/dist/img
+assets/admin-dependencies/plugins
+assets/admin-dependencies/vendors
+assets/admin-dependencies/dist/css
+assets/welcome-dependencies
+assets/dependencies
+assets/.eslintrc
+config/datastores.js
+assets/robots.txt
+assets/ViewerJS
+assets/uploads
+config/env/development.js
+assets/dependencies
+assets/robots.txt
+assets/.eslintrc
+assets/welcome-dependencies
+assets/ViewerJS
+assets/uploads
+config/datastores.js
+config/env/developement.js
+
+

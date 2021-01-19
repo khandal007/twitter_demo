@@ -1,0 +1,27 @@
+<section class="content-header">
+     
+    <ol class="breadcrumb">
+        <li>
+        	<% if(me.userRole == 65){ %> 
+        		<a href="/module/dashboard"> 
+        	<% } else if(me.userRole == 55){ %>
+        		<a href="/module/dashboard"> 
+        	<% } else if(me.userRole == 45){ %>
+        		<a href="/module/dashboard">
+        	<% } %> 
+        		<i class="fa fa-dashboard"></i> <%=__('dashboard')%>
+        	</a>
+        </li>
+        <% if(breadcrumb){ %>
+        <li class="active"><%- breadcrumb.pageTitle %></li>
+        <% } %>
+		<li class="active" style="cursor:pointer;"><a href="#" onclick="jumpBack(event)">BACK</a></li>
+    </ol>
+</section>
+<section class="content-header margin-1em-top">
+    <% if(breadcrumb){ %>
+   <h1>
+        <%- breadcrumb.pageTitle %>
+    </h1>
+    <% } %>
+</section>

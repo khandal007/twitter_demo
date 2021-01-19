@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Invoice PDF</title>
+	<link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,500,500i,700,700i&display=swap" rel="stylesheet">
+</head>
+<body style="font-family: 'Roboto', sans-serif;">
+	<style type="text/css">
+			.invoiceInfoTable { width:100%; font-size:12px;}
+			.invoiceInfoTable thead { background:#e4e4e4; border:1px solid #bbb;}
+			.invoiceInfoTable thead th{ padding:5px; text-align:center;}
+			.invoiceInfoTable tbody tr td { width:33.33%; padding:10px 0;}
+			.invoiceInfoTable tbody .billInfo span:first-child { width:100px; display: inline-block;}
+			.invoiceInfoTable .addressDiv { width:50%;}
+			.invoiceTable { width:100%; font-size:12px;border-top:1px solid #bbb; border-left:1px solid #bbb; margin-bottom:15px;}
+			.invoiceTable tfoot { text-align: center; font-weight:700; border-top:1px solid #a8a8a8;}
+			.invoiceTable tfoot tr td { padding:8px 0;}
+			.invoiceTable thead { background:#e4e4e4;}
+			.invoiceTable thead th,
+			.invoiceTable tbody td{ padding:5px; text-align:center; border-right:1px solid #bbb; border-bottom:1px solid #bbb;}
+
+			.poTable { width:100%; border-top:1px solid #000; border-bottom:1px solid #000; margin-bottom:10px; font-size:12px;}
+			.poTable td { width:33.33%; padding: 10px 0;}
+
+			.invoiceBalance { width: 50%; float:right; margin-top:15px;}
+			.invoiceBalance th,
+			.invoiceBalance td{ width: 50%; background:#eee; text-align:center; border:1px solid #bbb; font-size:11px; padding:5px 0;}
+			.invoiceBalance th { text-align:right; padding-right:10px;}
+			.invoiceBalance td { background:transparent;}
+
+			.invoiceBalance2 { width:25%; float:left; margin-top:15px;}
+			.invoiceBalance2 th,
+			.invoiceBalance2 td{ width: 70%; background:#eee; text-align:center; border:1px solid #bbb; font-size:11px; padding:5px 0;}
+			.invoiceBalance2 th { width:30%; text-align:left; padding-left:10px;}
+			.invoiceBalance2 td { background:transparent;}
+
+			.bankDetails { padding:15px; width:100%;}
+			.bankDetails div span:first-child { width:15%; display:inline-block;}
+	</style>
+<div style="max-width:1120px; width:100%; margin:0 auto; overflow:hidden;">
+
+	<!-- <div style="float:right;"><img src="<%=image_url%>" width="100px;"></div> -->
+	<table cellspacing="0" class="invoiceInfoTable" border="0">
+		<thead>
+			<th style="text-align:left;"><%=data.details[0].transaction_uid%></th>
+			<th>Purchase Voucher</th>
+			<th style="text-align:right;">Date: <%=moment(data.details[0].transaction_for_date).format("DD/MM/YYYY")%></th>
+		</thead>
+		<tbody>
+			<tr valign="top">
+				<% if(mode==9) {%>
+				<td>
+					<div>FROM:</div>
+					<div><strong><%=data.details[0].master_name%></strong></div>
+					<div style="width:80%;">Address: <%=data.details[0].company_address%></div>
+					<div><strong>GSTIN: <%=data.details[0].company_gst%></strong></div>
+					<div>State: <%=data.details[0].company_state%></div>
+				</td>
+				<td>
+					<div>TO:</div>
+					<div><strong><%=data.details[0].account_name%></strong></div>
+					<div style="width:80%;">Address: <%=data.details[0].address%></div>
+					<div><strong><%if(data.details[0].account_category!=3){%>
+						GSTIN: <%=data.details[0].gst_number%>
+						<%}else{%>
+						PAN No. <%=data.details[0].pan_number%>
+						<%}%></strong></div>
+					<div>State: <%=data.details[0].state_name%></div>
+				</td>
+				<%}else{%>
+					<td>
+					<div>FROM:</div>
+					<div><strong><%=data.details[0].account_name%></strong></div>
+					<div style="width:80%;">Address: <%=data.details[0].address%></div>
+					<div><strong><%if(data.details[0].account_category!=3){%>
+						GSTIN: <%=data.details[0].gst_number%>
+						<%}else{%>
+						PAN No. <%=data.details[0].pan_number%>
+						<%}%></strong></div>
+					<div>State: <%=data.details[0].state_name%></div>
+					</td>
+				<td>
+					<div>TO:</div>
+					<div><strong><%=data.details[0].master_name%></strong></div>
+					<div style="width:80%;">Address: <%=data.details[0].company_address%></div>
+					<div><strong>GSTIN: <%=data.details[0].company_gst%></strong></div>
+					<div>State: <%=data.details[0].company_state%></div>
+				</td>
+				<%}%>
+				<td>
+					<div>
+					<span>Ref Vendor Bill No.:</span>
+					<span><strong><%=(mode==9)?data.details[0].transaction_uid : data.details[0].transaction_for_invoice%></strong></span>
+					</div>
+					<div>
+					<span>SITE NAME:</span>
+					<span><%=data.details[0].site_name%></span>
+					</div>
+					<div>
+					<span>SITE ID:</span>
+					<span><%=data.details[0].site_id%></span>
+					</div>
+					<div>
+					<span>Ref No.:</span>
+					<span><%=data.details[0].site_reference%></span>
+					</div>
+					<div>
+					<span>SITE ADDRESS:</span>
+					<span><%=data.details[0].site_address%></span>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<span><strong>Service Period:  <%=data.details[0].service_month %></strong></span>
+				</td>
+				<td>Reverse Charge: Y/N - <%if(data.details[0].rev_charge){%><%=(data.details[0].rev_charge == 1)?"NO":"YES"%><%}%>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<%if(mode == 9){%>
+	<table class="poTable" cellspacing="0">
+		<tr valign="top">
+			<td>P.O. NO.<strong><%=data.details[0].revenue_for_serial%></strong></td>
+			<td class="text-right">P.O. Date: <strong><%=moment(data.details[0].revenue_for_date).format("DD/MM/YYYY")%></strong></td>
+		</tr>
+	</table>
+	<%}%>
+	<%if(data.taxDetail.length>0){%>
+	<table cellspacing="0" class="invoiceTable" border="0">
+		<thead>
+			<th>Item</th>
+			<th>HSN</th>
+			<th>Description</th>
+			<th>Taxable Value</th>
+			<%if(data.taxDetail[0].goods_cgst != 0){%>
+			<th>CGST @</th>
+			<th>CGST Amount</th>
+			<th>SGST @</th>
+			<th>SGST Amount</th>
+			<%}%>
+			<%if(data.taxDetail[0].goods_igst != 0){%>
+			<th>IGST @</th>
+			<th>IGST Amount</th>
+			<%}%>
+			<th>Total Amount</th>
+		</thead>
+		<tbody>
+			<%data.taxDetail.forEach(function (res,i){%>
+			<tr>
+				<td><%=(res.goods_code)?res.goods_code:i+1 %></td>
+				<td><%=res.goods_hsn%></td>
+				<td><%=res.goods_name%></td>
+				<td><%=res.goods_quantity * res.goods_rate%></td>
+				<%if(res.goods_cgst !=0){%>
+				<td><%=(res.goods_cgst != 0)?res.goods_gst/2:0%>%</td>
+				<td><%=res.goods_cgst%></td>
+				<td><%=(res.goods_sgst != 0)?res.goods_gst/2:0%>%</td>
+				<td><%=res.goods_sgst%></td>
+				<%}%>
+				<%if(res.goods_igst != 0){%>
+				<td><%=(res.goods_igst != 0)?res.goods_gst:0%>%</td>
+				<td><%=res.goods_igst%></td>
+				<%}%>
+				<td><%=(res.goods_amount+res.goods_cgst+res.goods_sgst+res.goods_igst).toFixed(2)%></td>
+			</tr>
+			<%})%>
+		</tbody>
+	</table>
+	<%}%>
+	<div style="font-weight:bold;">Project Name: <%=data.details[0].project_name%></div>
+	<div>
+		<table class="invoiceBalance2" cellspacing="0" border="0">
+	        <tbody>
+		        <% for(var x in data.other_info) {%>
+		        <tr>
+		          <th><span><%= x %></span></th>
+		          <td><span><%=data.other_info[x]%></span></td>
+		        </tr>
+		        <%}%>
+	      	</tbody>
+		  </table>
+		  <table class="invoiceBalance" cellspacing="0" border="0">
+		        <tbody>
+		        <tr>
+		          <th><span>Total Basic Amount</span></th>
+		          <td><span data-prefix="">&#8377;</span> <span><%=data.details[0].transaction_basic%></span></td>
+		        </tr>
+		        <tr>
+		          <th><span>Total CGST</span></th>
+		          <td><span data-prefix="">&#8377;</span> <span class="productTotalSpan"><%=data.details[0].transaction_cgst%></span></td>
+		        </tr>
+		        <tr>
+		          <th><span>Total SGST</span></th>
+		          <td><span data-prefix="">&#8377;</span> <span class="productTotalSpan"><%=data.details[0].transaction_sgst%></span></td>
+		        </tr> 
+		        <%if(data.details[0].transaction_igst!=0){%>
+		        <tr>
+		          <th><span>Total IGST</span></th>
+		          <td><span data-prefix="">₹</span><span class="productTotalSpan"><%=data.details[0].transaction_igst%></span></td>
+		        </tr>
+		        <%}%>
+		        <tr>
+		          <th><span>Total</span>
+		          </th>
+		          <td>       
+		            <span data-prefix="">&#8377;</span> <span class="productTotalSpan"><%=data.details[0].totalAmount%></span>
+		          </td>
+		        </tr>
+		      </tbody>
+		  </table>
+	</div>
+	<div style="display:inline-block; width:100%; font-size:14px;">
+		<div>Remarks:<br><%=data.details[0].transaction_remark%></div>
+		<input type="hidden" id="amtNumber" value="<%=data.details[0].totalAmount%>">
+		<div value=""><strong>In Words: <span id="amtWords"></span></strong> </div>
+	</div>
+</div>
+</body>
+</html>

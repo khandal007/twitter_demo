@@ -1,0 +1,337 @@
+
+<!--**** Moderator Dashboard Aside *******-->
+<% if(req.me.userRole == 65) { %>
+<%- partial('../../partials/dashboard-aside-super.ejs') %>
+<% } else if(req.me.userRole == 55){ %>
+<%- partial('../../partials/dashboard-aside-admin.ejs') %>
+<% }else{ %>
+<%- partial('../../partials/dashboard-aside-moderator.ejs') %>
+<% } %>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">  
+<%- partial('../../partials/dashboard-breadcrumb.ejs') %>
+    <section class="content">
+    <div class="row">
+       <div class="col-md-6">
+            <!-- Quick Links -->
+       
+          <div class="box box-info">
+            <div class="overlay dashbox1" style="display: none;">
+              <i class="fa fa-refresh fa-spin"></i>
+            </div>
+            <div class="box-header with-border">
+              <h3 class="box-title"><%= __('done') %></h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <% if(['5','4'].indexOf(attMode) == -1){ %>
+                <button type="button" onclick="window.location.replace('/allsiteEntries?type=1&mode=<%=attMode%>')" class="btn btn-box-tool"><i class="fa fa-eye"></i></button>
+                <% }else{ %>
+                <button type="button" onclick="window.location.replace('/form/entries?type=1&mode=<%=attMode%>')" class="btn btn-box-tool"><i class="fa fa-eye"></i></button>
+                <%}%>
+              </div>
+            </div>
+            <!-- /.box-header -->  
+          <div class="box-body">
+              <div class="table-responsive">
+                <table class="table no-margin recentTable" data-id="1" id="doneTable">
+                  <thead>
+                  <tr>
+                    <th>Credit Head</th>
+                    <th><%= debitLabel %></th>
+                    <th><span class="label label-success">Credit</span></th>
+                    <th><span class="label label-danger">Debit</span></th>
+                  </tr>
+                  </thead>
+                 <tbody></tbody>
+                </table>
+              </div>
+              <!-- /.table-responsive -->
+            </div>
+            <!-- /.box-body -->
+            
+            <!-- /.box-footer -->
+
+          </div>
+          <!-- /.box -->
+          <%if(attMode==1 ||attMode== 3 ||attMode== 4 ||attMode== 5){%>
+          <div class="box box-info">
+            <div class="overlay dashbox1" style="display: none;">
+              <i class="fa fa-refresh fa-spin"></i>
+            </div>
+            <div class="box-header with-border">
+              <h3 class="box-title">Vouchers</h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+              </div>
+            </div>
+            <!-- /.box-header -->  
+          <div class="box-body">
+              <div class="table-responsive">
+                <table class="table no-margin recentTable" id="voucherTable">
+                  <thead>
+                  <tr>
+                    <th>Credit Head</th>
+                    <th><span class="label label-success">Amount</span></th>
+                    <th><span >Date</span></th>
+                    <th><span >Voucher No.</span></th>
+                    <th><span >Created By</span></th>
+                    <th><span >Action</span></th>
+                  </tr>
+                  </thead>
+                 <tbody>
+                   
+                 </tbody>
+                </table>
+              </div>
+              <!-- /.table-responsive -->
+            </div>
+            <!-- /.box-body -->
+            
+            <!-- /.box-footer -->
+            
+          </div>
+          
+            <%}%>
+        </div>
+        <!-- /.col -->
+        <div class="col-md-6">
+            <!-- TABLE: LATEST ORDERS -->
+          <div class="box box-info">
+            <div class="overlay dashbox2" style="display: none;">
+              <i class="fa fa-refresh fa-spin"></i>
+            </div>
+            <div class="box-header with-border">
+              <h3 class="box-title"><%= __('approval') %></h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <% if(['5','4'].indexOf(attMode) == -1){ %>
+                <button type="button" onclick="window.location.replace('/allsiteEntries?type=2&mode=<%=attMode%>')" class="btn btn-box-tool"><i class="fa fa-eye"></i></button>
+                <% }else{ %>
+                <button type="button" onclick="window.location.replace('/form/entries?type=2&mode=<%=attMode%>')" class="btn btn-box-tool"><i class="fa fa-eye"></i></button>
+                <%}%>
+              </div>
+            </div>
+            <!-- /.box-header -->  
+          <div class="box-body">
+              <div class="table-responsive">
+                <table class="table no-margin recentTable" data-id="2" id="holdTable">
+                  <thead>
+                  <tr>
+                    <th>Credit Head</th>
+                    <th><%= debitLabel %></th>
+                    <th><span class="label label-success">Credit</span></th>
+                    <th><span class="label label-danger">Debit</span></th>
+                  </tr>
+                  </thead>
+                </table>
+              </div>
+              <!-- /.table-responsive -->
+            </div>
+            <!-- /.box-body -->
+            
+            <!-- /.box-footer -->
+          </div>
+          <!-- /.box -->
+          <div class="box box-info">
+            <div class="overlay dashbox3" style="display: none;">
+              <i class="fa fa-refresh fa-spin"></i>
+            </div>
+            <div class="box-header with-border">
+              <h3 class="box-title"><%= __('requirement') %></h3>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <% if(['5','4'].indexOf(attMode) == -1){ %>
+                <button type="button" onclick="window.location.replace('/allsiteEntries?type=3&mode=<%=attMode%>')" class="btn btn-box-tool"><i class="fa fa-eye"></i></button>
+                <% }else{ %>
+                <button type="button" onclick="window.location.replace('/form/entries?type=3&mode=<%=attMode%>')" class="btn btn-box-tool"><i class="fa fa-eye"></i></button>
+                <%}%>
+              </div>
+            </div>
+            <!-- /.box-header -->  
+          <div class="box-body">
+              <div class="table-responsive">
+                <table class="table no-margin recentTable" data-id="3" id="reqTable">
+                  <thead>
+                  <tr>
+                    <th>Credit Head</th>
+                    <th><%= debitLabel %></th>
+                    <th><span class="label label-success">Credit</span></th>
+                    <th><span class="label label-danger">Debit</span></th>
+                  </tr>
+                  </thead>
+                </table>
+              </div>
+              <!-- /.table-responsive -->
+            </div>
+            <!-- /.box-body -->
+            
+            <!-- /.box-footer -->
+          </div>
+          <!-- /.box -->
+        </div>
+      <div>
+    </section>
+</div>
+<input type="hidden" name="attMode" id="attMode" value="<%=attMode%>">
+<input type="hidden" name="attModeType" id="attModeType" value="<%=attModeType%>">
+<!-- /.content-wrapper -->
+<%- partial('../../partials/edit-transaction.ejs') %>
+<script src="/admin-dependencies/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="/admin-dependencies/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="/admin-dependencies/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+<script type="text/javascript">
+   var alltables = [];
+    $(document).ready(function(e){
+      // $("#doneTable").DataTable({ordering : false});
+      // $("#holdTable").DataTable({ordering : false,pageLength:5});
+      // $("#reqTable").DataTable({ordering : false,pageLength:5});
+
+          var example =  null;
+   
+
+  var getValue = $('#acctype').val();
+  //var
+  //alert(getValue);
+  var obj = [
+        {
+                id:1,
+                limit:100
+        },
+        {
+                id:2,
+                limit:50
+        },
+        {
+               id:3,
+               limit:50
+        }, 
+        // {
+        //        id:4,
+        //        limit:50
+        // },
+    ];
+   var attMode = $("#attMode").val();
+   var attModeType = $("#attModeType").val();
+  obj.forEach(async function(d){
+    alltables[d.id] = null;
+   let url ='/getRecentEntries?type='+d.id+'&limit='+d.limit+'&mode='+attMode; 
+  await doAjaxCall(url,{},'GET',true,'dashbox'+d.id,function (data,type) 
+  {
+    //console.log(data);
+      if(data.status=="success"){
+        var allItems = [];
+        //loop here  
+            //console.log(data);
+          data.allData.map(function(dataVal,i){
+            var redirectUrl = `/form/entries?type=${d.id}&head_id=${dataVal.credit_head}`;
+            var creditName = dataVal.account_name;
+            if(attModeType == "expense"){
+                var debitName = dataVal.site_name;
+                //redirectUrl = `${redirectUrl}&site_id=${dataVal.site_id}&mode=${attMode}`;
+            }else if(attModeType == "payment"){
+                var debitName = dataVal.debit_name;
+                //redirectUrl = `${redirectUrl}&debit_head=${dataVal.debit_id}&mode=${attMode}`;
+            }else{
+                var debitName = dataVal.site_name;
+                //redirectUrl = `${redirectUrl}&mode_no=${dataVal.transaction_uid}`;
+            }
+            redirectUrl = `${redirectUrl}&mode_no=${dataVal.transaction_uid}`;
+            var totalSum = dataVal.totalSum;
+            var totalRows = "";
+           // var finalRow = `<span onclick=window.location.replace(${redirectUrl})>${creditName}</span>`
+
+           // var link = `<button onclick="window.location.replace('/form/entries?type=${d.id}&head_id=${dataVal.credit_head}&site_id=${dataVal.site_id}')" type="button" class="btn btn-box-tool"><i class="fa fa-eye"></i></button>`;
+            var accName = `<span style="cursor:pointer" onclick=window.location.replace('${redirectUrl}')>${creditName}</span>`;
+            var siteName = `<span style="cursor:pointer" onclick=window.location.replace('${redirectUrl}')>${debitName}</span>`;
+            var creditTotal = `<span style="cursor:pointer" onclick=window.location.replace('${redirectUrl}')>${totalSum}</span>`;
+            var debitTotal =`<span style="cursor:pointer" onclick=window.location.replace('${redirectUrl}')>${totalRows}</span>`;
+           allItems.push([accName, siteName, creditTotal, debitTotal]);
+
+        });
+          //console.log(allItems);
+
+        //allItems.push()
+
+        //Loop ends
+         var datatableObj={
+          // paging      : true,
+          // lengthMenu : [[5, 10, 50, -1]],
+          searching   : true,        
+          info       : true,
+          ordering   : false,
+          // scrollX  : true,
+          // scrollY: 300,
+          // scrollCollapse: true,
+          // autoWidth   : true,  
+          data : allItems    
+          };
+          //console.log(datatableObj);
+        if(d.id == 1){
+            alltables[d.id] = $("#doneTable").DataTable(datatableObj);
+           datatableObj = null;
+        }else if(d.id ==2){
+          alltables[d.id] = $("#holdTable").DataTable(datatableObj);
+          datatableObj = null;
+        }else if(d.id ==3){
+         alltables[d.id] = $('#reqTable').DataTable(datatableObj);
+          datatableObj = null;
+        }
+        else if(d.id ==4){
+         alltables[d.id] = $('#recallTable').DataTable(datatableObj);
+          datatableObj = null;
+        }else{
+
+        }
+
+       
+          } 
+          else{
+            alert("Something went wrong");
+          }
+      });
+    });
+    // $('.recentTable tbody').on('click', 'tr', function () {
+    //   console.log(alltables);
+    //   var mode = $(this).parent('table').attr('data-id');
+    //           var data = alltables[mode].row( this ).data();
+    //           alert( 'You clicked on '+data[0]+'\'s row' );
+    //   });
+    var voucherData=[];
+  $.ajax({
+    type: "GET",
+      url: '/getVoucherData',
+      data: {limit:100,mode:attMode},
+      datatype:'json',
+      success: function (res) {
+        res.allData.map(function(dataVal,i){
+            var redirectUrl = `/allTrListByMode?voucher_id=${dataVal.id}&mode=${dataVal.mode}`;
+            var accName = `<span>${dataVal.account_name}</span>`;
+            var amount = `<span>${dataVal.amount}</span>`;
+            var voucher_date = `<span>${dataVal.voucher_date}</span>`;
+            var voucher_no = `<span>${dataVal.voucher_uid}</span>`;
+            var createdBy = `<span>${dataVal.createdBy}</span>`;
+            var print = `<span style="cursor:pointer")><a onclick=window.location.replace('/printVoucher?voucher_id=${dataVal.id}&mode=${dataVal.mode}')><i class="fa fa-print"></i></a></span>`;
+           voucherData.push([accName, amount, voucher_date, voucher_no, createdBy, print]);
+        });
+        console.log("voucherData",voucherData);
+        var datatableObj={
+          searching   : true,        
+          info       : true,
+          ordering   : false,
+          data : voucherData
+          };
+          $("#voucherTable").DataTable(datatableObj);
+      }
+    });
+     
+   });
+
+</script>
+
