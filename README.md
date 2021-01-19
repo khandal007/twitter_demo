@@ -25,8 +25,10 @@ How to install the Project:-
 
 2. Install the redis server.
 
-3. Then npm install in the project.
+3. After that start the SQL server
 
-4. After then run the command 'sails lift'.
+4. Then npm install in the project.
 
-5. Then simply sign up and run the project.
+5. After then run the command 'sails lift'.
+
+6. Then simply sign up and run the project.
